@@ -10,4 +10,8 @@ class MppProjectApplicationTests {
 	void contextLoads() {
 	}
 
+	@Test
+	void otherContextLoads() {
+	}
+
 }
