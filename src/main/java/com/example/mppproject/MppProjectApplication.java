@@ -10,4 +10,8 @@ public class MppProjectApplication {
 		SpringApplication.run(MppProjectApplication.class, args);
 	}
 
+	public String Hello(){
+		return "Hello";
+	}
+
 }
