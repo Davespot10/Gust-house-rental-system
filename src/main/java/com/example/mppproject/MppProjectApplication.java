@@ -11,7 +11,7 @@ public class MppProjectApplication {
 	}
 
 	public String Hello(){
-		return "Hey";
+		return "Hello Jemaw";
 	}
 
 }
