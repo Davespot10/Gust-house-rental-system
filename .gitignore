@@ -45,3 +45,5 @@ target
 secrets.yml
 .gradletasknamecache
 .sts4-cache
+/target/classes/
+/target/test-classes/
