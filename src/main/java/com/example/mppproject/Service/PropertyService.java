@@ -7,8 +7,6 @@ import com.example.mppproject.Repository.HomePropertyRepository;
 import com.example.mppproject.Repository.ImageRepository;
 import com.example.mppproject.Repository.PropertyRepository;
 import com.google.cloud.storage.*;
-import com.mysql.cj.x.protobuf.MysqlxPrepare;
-import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,8 +49,7 @@ public class PropertyService {
                 File file = convertMultiPartToFile(images.get(i));
                 Path filePath = file.toPath();
 
-                MysqlxPrepare.Deallocate StorageOptions;
-                EmbeddedMongoProperties.Storage storage = StorageOptions.newBuilder().setCredentials(GoogleCredentials.fromStream(serviceAccount)).setProjectId(FIREBASE_PROJECT_ID).build().getService();
+                Storage storage = StorageOptions.newBuilder().setCredentials(GoogleCredentials.fromStream(serviceAccount)).setProjectId(FIREBASE_PROJECT_ID).build().getService();
                 BlobId blobId = BlobId.of(FIREBASE_BUCKET, objectName);
                 BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType(images.get(i).getContentType()).build();
                 String extenstion = blobInfo.getContentType().split("/")[1];
