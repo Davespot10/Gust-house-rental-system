@@ -53,16 +53,9 @@ public class PropertyController {
                                                     ,@RequestPart("bed_number") String bed_number
                                                     ,@RequestPart("bed_room_number") String bed_room_number
                                                     ,@RequestPart("property_description") String property_description
+//                                                    Image fields
                                                     ,@RequestPart("images") List<MultipartFile> images
     ){
-
-        System.out.println(capacity);
-        System.out.println(title);
-        System.out.println(description);
-        System.out.println(price_per_night);
-        System.out.println(space);
-        System.out.println(type);
-        System.out.println(images.size());
 
         Address address = new Address(state,city,country,zip_code,street_number,lat,lon);
         HomeProperty homeProperty = new HomeProperty(Integer.parseInt(bath_room_number), Integer.parseInt(bed_number), Integer.parseInt(bed_room_number), description);
@@ -71,9 +64,13 @@ public class PropertyController {
                 ApprovedStatus.PENDING,
                 false, Integer.parseInt(capacity), null, homeProperty,null);
 
-        Boolean result = propertyService.create(property, address, homeProperty);
+        Boolean result = propertyService.create(property, images);
 
-        return OurResponses.okResponse();
+        if(result){
+            return OurResponses.okResponse(property);
+        }
+
+        return OurResponses.errorResponse();
     }
 
 }
