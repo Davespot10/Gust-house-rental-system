@@ -6,6 +6,7 @@ import com.example.mppproject.Model.AppUser;
 import com.example.mppproject.Repository.AccountRepository;
 import com.example.mppproject.Repository.AddressRepository;
 import com.example.mppproject.Repository.AppUserRepository;
+import com.example.mppproject.exceptionResponse.userException.UserNotFoundException;
 import com.google.api.gax.rpc.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -49,11 +50,11 @@ public class AppUserService {
 
     }
 
-    public void editAppUserAccount(AppUser appUser) {
+    public void editAppUserAccount(AppUser appUser) throws Exception {
         Long userId = appUser.getId();
         Optional<AppUser> existingUser = appUserRepository.findById(userId);
         if(!existingUser.isPresent()) {
-            throw new IllegalStateException("student id :" + userId + " does not exist");
+            throw new UserNotFoundException("student id :" + userId + " does not exist");
         }
         AppUser appUser1 = existingUser.get();
 

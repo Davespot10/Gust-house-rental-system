@@ -29,7 +29,7 @@ public class AppUserController {
     }
 
     @PutMapping
-    public List<AppUser> editAppUserAccount(@RequestBody AppUser appUser) {
+    public List<AppUser> editAppUserAccount(@RequestBody AppUser appUser) throws Exception {
         appUserService.editAppUserAccount(appUser);
         return appUserService.getAppUser();
     }
