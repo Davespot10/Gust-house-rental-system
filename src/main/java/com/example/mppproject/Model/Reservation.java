@@ -3,7 +3,6 @@ package com.example.mppproject.Model;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -19,7 +18,7 @@ public class Reservation {
     private Double calculatedPrice;
 
     @Column(name = "start_date")
-    private LocalDate startDate;
+    private String startDate;
 
     @Column(name = "end_date")
     private String endDate;
@@ -31,6 +30,29 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "property_id")
     private Property property;
+
+    @Column(name = "ref_number", nullable = false, unique = true)
+    private String refNumber;
+
+    @ManyToOne
+    @JoinColumn(name = "reservation_status_id")
+    private ReservationStatus reservationStatus;
+
+    public ReservationStatus getReservationStatus() {
+        return reservationStatus;
+    }
+
+    public void setReservationStatus(ReservationStatus reservationStatus) {
+        this.reservationStatus = reservationStatus;
+    }
+
+    public String getRefNumber() {
+        return refNumber;
+    }
+
+    public void setRefNumber(String refNumber) {
+        this.refNumber = refNumber;
+    }
 
     public Property getProperty() {
         return property;
@@ -56,11 +78,11 @@ public class Reservation {
         this.endDate = endDate;
     }
 
-    public LocalDate getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
