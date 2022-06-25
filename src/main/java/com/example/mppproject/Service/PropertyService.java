@@ -34,11 +34,11 @@ public class PropertyService {
         return true;
     }
 
-    public List<Property> getStudent() {
+    public List<Property> getProperty() {
         return propertyRepository.findAll();
     }
 
-    public Property getStudentById(long id) {
+    public Property getPropertyById(long id) {
         boolean exist = propertyRepository.existsById(id);
         if (!exist){
             throw new IllegalStateException("student " + id + "does not exist");

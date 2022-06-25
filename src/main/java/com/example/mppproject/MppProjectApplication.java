@@ -15,7 +15,7 @@ public class MppProjectApplication {
 
 	@GetMapping("/")
 	public String index() {
-		return "Greetings from student project!!!";
+		return "Greetings from MPP project!!!";
 	}
 
 }

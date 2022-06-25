@@ -75,12 +75,12 @@ public class PropertyController {
 
 
     @GetMapping
-    public List<Property> getStudent() {
-        return propertyService.getStudent();
+    public List<Property> getProperty() {
+        return propertyService.getProperty();
     }
 
     @GetMapping(path = "{id}")
-    public Property getStudentById(@PathVariable("id") long id) {
-        return propertyService.getStudentById(id);
+    public Property getPropertyById(@PathVariable("id") long id) {
+        return propertyService.getPropertyById(id);
     }
 }
