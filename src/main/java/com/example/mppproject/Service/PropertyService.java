@@ -7,7 +7,6 @@ import com.example.mppproject.Repository.HomePropertyRepository;
 import com.example.mppproject.Repository.ImageRepository;
 import com.example.mppproject.Repository.PropertyRepository;
 import com.google.cloud.storage.*;
-import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
@@ -92,17 +91,5 @@ public class PropertyService {
 
     private String generateFileName(MultipartFile multiPart) {
         return new Date().getTime() + "-" + Objects.requireNonNull(multiPart.getOriginalFilename()).replace(" ", "_");
-    }
-
-    public List<Property> getProperty() {
-        return propertyRepository.findAll();
-    }
-
-    public Property getPropertyById(long id) {
-        boolean exist = propertyRepository.existsById(id);
-        if (!exist){
-            throw new IllegalStateException("student " + id + "does not exist");
-        }
-        return  propertyRepository.findById(id);
     }
 }
