@@ -8,6 +8,8 @@ import com.example.mppproject.Model.Enum.Type;
 import com.example.mppproject.Model.HomeProperty;
 import com.example.mppproject.Model.Property;
 import com.example.mppproject.Service.PropertyService;
+import com.example.mppproject.exceptionResponse.propertyException.PropertyBadRequestException;
+import com.example.mppproject.exceptionResponse.propertyException.PropertyNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.availability.AvailabilityState;
 import org.springframework.http.MediaType;
@@ -79,5 +81,50 @@ public class PropertyController {
     @GetMapping(path = "{id}")
     public Property getPropertyById(@PathVariable("id") long id) {
         return propertyService.getPropertyById(id);
+    }
+
+    @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+    public HashMap<Object, Object> updateProperties(
+//            Property Id
+            @RequestPart(value = "property_id",required = true) String property_id
+
+            ,@RequestPart(value = "capacity",required = false) String capacity
+            ,@RequestPart(value = "title", required = false) String title
+            ,@RequestPart(value = "description", required = false) String description
+            ,@RequestPart(value = "price_per_night", required = false) String price_per_night
+            ,@RequestPart(value = "space", required = false) String space
+            ,@RequestPart(value = "type", required = false) String type
+//                                                    Address fields
+            ,@RequestPart(value = "city", required = false) String city
+            ,@RequestPart(value = "country", required = false) String country
+            ,@RequestPart(value = "lat", required = false) String lat
+            ,@RequestPart(value = "lon", required = false) String lon
+            ,@RequestPart(value = "state", required = false) String state
+            ,@RequestPart(value = "street_number", required = false) String street_number
+            ,@RequestPart(value = "zip_code", required = false) String zip_code
+//                                                    Home property fields
+            ,@RequestPart(value = "bath_room_number", required = false) String bath_room_number
+            ,@RequestPart(value = "bed_number", required = false) String bed_number
+            ,@RequestPart(value = "bed_room_number", required = false) String bed_room_number
+            ,@RequestPart(value = "property_description", required = false) String property_description
+//                                                    Image fields
+            ,@RequestPart(value = "images", required = false) List<MultipartFile> images
+    )throws PropertyNotFoundException, PropertyBadRequestException {
+
+        Address address = new Address(state,city,country,zip_code,street_number,lat,lon);
+        HomeProperty homeProperty = new HomeProperty(Integer.parseInt(bath_room_number), Integer.parseInt(bed_number), Integer.parseInt(bed_room_number), description);
+        Property property = new Property(title, Type.valueOf(type), Space.valueOf(space),description,address
+                ,Double.parseDouble(price_per_night),
+                ApprovedStatus.PENDING,
+                false, Integer.parseInt(capacity), null, homeProperty,null);
+        property.setId(Long.valueOf(property_id));
+
+        Boolean result = propertyService.update(property, images);
+
+        if(result){
+            return OurResponses.okResponse(property);
+        }
+
+        return OurResponses.errorResponse();
     }
 }

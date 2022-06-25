@@ -1,11 +1,15 @@
 package com.example.mppproject.Service;
 
+import com.example.mppproject.Model.Enum.ApprovedStatus;
+import com.example.mppproject.Model.Enum.Type;
 import com.example.mppproject.Model.Image;
 import com.example.mppproject.Model.Property;
 import com.example.mppproject.Repository.AddressRepository;
 import com.example.mppproject.Repository.HomePropertyRepository;
 import com.example.mppproject.Repository.ImageRepository;
 import com.example.mppproject.Repository.PropertyRepository;
+import com.example.mppproject.exceptionResponse.propertyException.PropertyBadRequestException;
+import com.example.mppproject.exceptionResponse.propertyException.PropertyNotFoundException;
 import com.google.cloud.storage.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -104,4 +108,58 @@ public class PropertyService {
         return  propertyRepository.findById(id);
     }
 
+    public Property update(Property property, List<MultipartFile> images) throws PropertyNotFoundException{
+        Optional<Property> p = propertyRepository.findById(property.getId());
+        if(p.isEmpty()){
+            throw new PropertyNotFoundException("Property with this Id not found");
+        }
+        Property p2 = p.get();
+        List<Image> oldImages = imageRepository.findByProperty_Id(p2.getId());
+        List<Long> oldId = new ArrayList<>();
+        for(int i=0;i<oldImages.size();i++){
+            System.out.println(oldImages.get(i).getId());
+            oldId.add(oldImages.get(i).getId());
+        }
+
+        System.out.println("Size: "+oldImages.size());
+        if(p2.getApprovedStatus().equals(ApprovedStatus.PENDING) ||
+                p2.getApprovedStatus().equals(ApprovedStatus.DISAPPROVED)){
+            List<Image> imagesArray = new ArrayList<>();
+            try {
+                imageRepository.deleteAllById(oldId);
+                for (int i = 0; i < images.size(); i++) {
+                    String objectName = generateFileName(images.get(i));
+
+                    Path JSONFilePath = ResourceUtils.getFile(FIREBASE_SDK_JSON).toPath();
+                    FileInputStream serviceAccount = new FileInputStream(String.valueOf(JSONFilePath));
+                    File file = convertMultiPartToFile(images.get(i));
+                    Path filePath = file.toPath();
+
+                    Storage storage = StorageOptions.newBuilder().setCredentials(GoogleCredentials.fromStream(serviceAccount)).setProjectId(FIREBASE_PROJECT_ID).build().getService();
+                    BlobId blobId = BlobId.of(FIREBASE_BUCKET, objectName);
+                    BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType(images.get(i).getContentType()).build();
+                    String extenstion = blobInfo.getContentType().split("/")[1];
+                    Blob b= storage.create(blobInfo, Files.readAllBytes(filePath));
+
+                    String imageUrl = "https://firebasestorage.googleapis.com/v0/b/"+
+                            FIREBASE_BUCKET+"/o/"+
+                            objectName+"?alt=media&token=e7941d9c-0822-445e-8fc5-137b03c1c2b8";
+
+                    Image image = new Image(imageUrl, extenstion, blobInfo.getName());
+                    imagesArray.add(image);
+                    file.delete();
+                }
+                for(int i=0;i<imagesArray.size();i++){
+                    imagesArray.get(i).setProperty(p2);
+                    imageRepository.save(imagesArray.get(i));
+                }
+            }catch (IOException ioException){
+                System.out.println(ioException.getMessage());
+                return null;
+            }
+            return property;
+
+        }
+        throw new PropertyBadRequestException("You can not update the property");
+    }
 }

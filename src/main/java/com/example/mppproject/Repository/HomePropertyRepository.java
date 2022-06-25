@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface HomePropertyRepository extends JpaRepository<HomeProperty, UUID> {
+public interface HomePropertyRepository extends JpaRepository<HomeProperty, Long> {
 }
