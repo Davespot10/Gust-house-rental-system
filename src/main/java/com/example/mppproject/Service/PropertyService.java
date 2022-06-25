@@ -108,7 +108,8 @@ public class PropertyService {
         return  propertyRepository.findById(id);
     }
 
-    public Property update(Property property, List<MultipartFile> images) throws PropertyNotFoundException{
+    public Property update(Property property, List<MultipartFile> images) throws PropertyNotFoundException, IOException {
+        HashMap<Object, Object> response = new HashMap<>();
         Optional<Property> p = propertyRepository.findById(property.getId());
         if(p.isEmpty()){
             throw new PropertyNotFoundException("Property with this Id not found");
@@ -117,11 +118,9 @@ public class PropertyService {
         List<Image> oldImages = imageRepository.findByProperty_Id(p2.getId());
         List<Long> oldId = new ArrayList<>();
         for(int i=0;i<oldImages.size();i++){
-            System.out.println(oldImages.get(i).getId());
             oldId.add(oldImages.get(i).getId());
         }
 
-        System.out.println("Size: "+oldImages.size());
         if(p2.getApprovedStatus().equals(ApprovedStatus.PENDING) ||
                 p2.getApprovedStatus().equals(ApprovedStatus.DISAPPROVED)){
             List<Image> imagesArray = new ArrayList<>();
@@ -155,9 +154,9 @@ public class PropertyService {
                 }
             }catch (IOException ioException){
                 System.out.println(ioException.getMessage());
-                return null;
+                throw new IOException();
             }
-            return property;
+            return p2;
 
         }
         throw new PropertyBadRequestException("You can not update the property");
