@@ -16,8 +16,10 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @RestController
@@ -109,7 +111,7 @@ public class PropertyController {
             ,@RequestPart(value = "property_description", required = false) String property_description
 //                                                    Image fields
             ,@RequestPart(value = "images", required = false) List<MultipartFile> images
-    )throws PropertyNotFoundException, PropertyBadRequestException {
+    ) throws PropertyNotFoundException, PropertyBadRequestException, IOException {
 
         Address address = new Address(state,city,country,zip_code,street_number,lat,lon);
         HomeProperty homeProperty = new HomeProperty(Integer.parseInt(bath_room_number), Integer.parseInt(bed_number), Integer.parseInt(bed_room_number), description);
@@ -119,12 +121,8 @@ public class PropertyController {
                 false, Integer.parseInt(capacity), null, homeProperty,null);
         property.setId(Long.valueOf(property_id));
 
-        Boolean result = propertyService.update(property, images);
+        Object result = propertyService.update(property, images);
 
-        if(result){
-            return OurResponses.okResponse(property);
-        }
-
-        return OurResponses.errorResponse();
+        return OurResponses.okResponse(result);
     }
 }
