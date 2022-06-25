@@ -11,10 +11,7 @@ import com.example.mppproject.Service.PropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.availability.AvailabilityState;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
@@ -76,4 +73,14 @@ public class PropertyController {
         return OurResponses.okResponse();
     }
 
+
+    @GetMapping
+    public List<Property> getStudent() {
+        return propertyService.getStudent();
+    }
+
+    @GetMapping(path = "{id}")
+    public Property getStudentById(@PathVariable("id") long id) {
+        return propertyService.getStudentById(id);
+    }
 }
