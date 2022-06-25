@@ -18,7 +18,7 @@ public class Property {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    private Long id;
 
     @Column(name = "title", nullable = false)
     private String title;
@@ -60,6 +60,23 @@ public class Property {
 
     @OneToMany(mappedBy = "property", orphanRemoval = true)
     private Set<Review> reviews = new LinkedHashSet<>();
+
+    public Property(){}
+
+    public Property(String title, Type type, Space space, String description, Address address, Double pricePerNight, ApprovedStatus approvedStatus, Boolean availabiltyStatus, Integer capacity, Set<Reservation> reservations, HomeProperty homeProperty, Set<Review> reviews) {
+        this.title = title;
+        this.type = type;
+        this.space = space;
+        this.description = description;
+        this.address = address;
+        this.pricePerNight = pricePerNight;
+        this.approvedStatus = approvedStatus;
+        this.availabiltyStatus = availabiltyStatus;
+        this.capacity = capacity;
+        this.reservations = reservations;
+        this.homeProperty = homeProperty;
+        this.reviews = reviews;
+    }
 
     public Set<Review> getReviews() {
         return reviews;
@@ -157,11 +174,11 @@ public class Property {
         this.title = title;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

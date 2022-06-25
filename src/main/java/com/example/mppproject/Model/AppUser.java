@@ -11,7 +11,7 @@ public class AppUser {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    private Long id;
 
     @Column(name = "first_name")
     private String firstName;
@@ -40,6 +40,18 @@ public class AppUser {
 
     @OneToMany(mappedBy = "appUser", orphanRemoval = true)
     private Set<Reservation> reservations = new LinkedHashSet<>();
+
+    @OneToOne(orphanRemoval = true)
+    @JoinColumn(name = "account_id")
+    private Account account;
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
 
     public Set<Reservation> getReservations() {
         return reservations;
@@ -105,11 +117,11 @@ public class AppUser {
         this.firstName = firstName;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

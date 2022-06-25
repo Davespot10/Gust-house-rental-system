@@ -9,7 +9,7 @@ public class Address {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    private Long id;
 
     @Column(name = "state")
     private String state;
@@ -31,6 +31,18 @@ public class Address {
 
     @Column(name = "lon")
     private String lon;
+
+    public Address(){}
+
+    public Address(String state, String city, String country, String zipCode, String streetNumber, String lat, String lon) {
+        this.state = state;
+        this.city = city;
+        this.country = country;
+        this.zipCode = zipCode;
+        this.streetNumber = streetNumber;
+        this.lat = lat;
+        this.lon = lon;
+    }
 
     public String getLon() {
         return lon;
@@ -88,11 +100,11 @@ public class Address {
         this.state = state;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

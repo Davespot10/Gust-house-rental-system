@@ -9,7 +9,7 @@ public class HomeProperty {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    private Long id;
 
     @Column(name = "bath_room_number")
     private Integer bathRoomNumber;
@@ -22,6 +22,15 @@ public class HomeProperty {
 
     @Column(name = "description")
     private String description;
+
+    public HomeProperty(){}
+
+    public HomeProperty(Integer bathRoomNumber, Integer bedNumber, Integer bedRoomNumber, String description) {
+        this.bathRoomNumber = bathRoomNumber;
+        this.bedNumber = bedNumber;
+        this.bedRoomNumber = bedRoomNumber;
+        this.description = description;
+    }
 
     public String getDescription() {
         return description;
@@ -55,11 +64,11 @@ public class HomeProperty {
         this.bathRoomNumber = bathRoomNumber;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
