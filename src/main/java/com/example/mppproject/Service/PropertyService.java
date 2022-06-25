@@ -99,8 +99,9 @@ public class PropertyService {
     public Property getPropertyById(long id) {
         boolean exist = propertyRepository.existsById(id);
         if (!exist){
-            throw new IllegalStateException("student " + id + "does not exist");
+            throw new IllegalStateException("student id :" + id + " does not exist");
         }
+
         return  propertyRepository.findById(id);
     }
 
