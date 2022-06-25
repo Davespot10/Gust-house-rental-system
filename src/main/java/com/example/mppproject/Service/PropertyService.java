@@ -9,6 +9,7 @@ import com.example.mppproject.Repository.PropertyRepository;
 import com.google.cloud.storage.*;
 import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoProperties;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,6 +40,7 @@ public class PropertyService {
         this.imageRepository = imageRepository;
     }
 
+    @Transactional
     public Boolean create(Property property, List<MultipartFile> images) {
         List<Image> imagesArray = new ArrayList<>();
         try {
