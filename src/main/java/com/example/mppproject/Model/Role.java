@@ -13,7 +13,7 @@ public class Role {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    private Long id;
 
     @Enumerated
     @Column(name = "role_type")
@@ -27,11 +27,11 @@ public class Role {
         this.roleType = roleType;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

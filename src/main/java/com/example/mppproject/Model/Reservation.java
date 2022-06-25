@@ -13,7 +13,7 @@ public class Reservation {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    private Long id;
 
     @Column(name = "calculated_price")
     private Double calculatedPrice;
@@ -72,11 +72,11 @@ public class Reservation {
         this.calculatedPrice = calculatedPrice;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

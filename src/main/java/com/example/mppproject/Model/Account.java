@@ -9,13 +9,20 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    private UUID id;
+    private Long id;
 
     @Column(name = "account_number", nullable = false, unique = true)
     private Integer accountNumber;
 
     @Column(name = "balance")
     private Double balance;
+
+    public Account(){}
+
+    public Account(Integer accountNumber, Double balance) {
+        this.accountNumber = accountNumber;
+        this.balance = balance;
+    }
 
     public Double getBalance() {
         return balance;
@@ -33,11 +40,11 @@ public class Account {
         this.accountNumber = accountNumber;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
