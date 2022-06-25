@@ -1,6 +1,7 @@
 package com.example.mppproject.exceptionResponse;
 
 import com.example.mppproject.Model.exception.ExceptionResponse;
+import com.example.mppproject.exceptionResponse.propertyException.PropertyBadRequestException;
 import com.example.mppproject.exceptionResponse.propertyException.PropertyNotFoundException;
 import com.example.mppproject.exceptionResponse.reservationException.ReservationNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -17,11 +18,11 @@ import java.util.Date;
 @ControllerAdvice
 public class ResponseEntityException extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ExceptionResponse> allException(Exception exception, WebRequest webRequest){
-        ExceptionResponse message = new ExceptionResponse(new Date(), HttpStatus.INTERNAL_SERVER_ERROR,exception.getMessage());
-        return new ResponseEntity(message,HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<ExceptionResponse> allException(Exception exception, WebRequest webRequest){
+//        ExceptionResponse message = new ExceptionResponse(new Date(), HttpStatus.INTERNAL_SERVER_ERROR,exception.getMessage());
+//        return new ResponseEntity(message,HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 
     @ExceptionHandler(PropertyNotFoundException.class)
     public ResponseEntity<ExceptionResponse> propertyNotFound
@@ -37,6 +38,14 @@ public class ResponseEntityException extends ResponseEntityExceptionHandler {
         ExceptionResponse message = new ExceptionResponse
                 (new Date(), HttpStatus.NOT_FOUND, exception.getMessage());
         return new ResponseEntity(message,HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(PropertyBadRequestException.class)
+    public ResponseEntity<ExceptionResponse> propertyBadRequest
+            (Exception exception, WebRequest webRequest){
+        ExceptionResponse message = new ExceptionResponse
+                (new Date(), HttpStatus.BAD_REQUEST, exception.getMessage());
+        return new ResponseEntity(message,HttpStatus.BAD_REQUEST);
     }
 
 }
