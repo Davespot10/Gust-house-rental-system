@@ -1,6 +1,7 @@
 package com.example.mppproject.Controller;
 
 import com.example.mppproject.Model.AppUser;
+import com.example.mppproject.Model.Property;
 import com.example.mppproject.Service.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,9 +30,20 @@ public class AppUserController {
     }
 
     @PutMapping
-    public List<AppUser> editAppUserAccount(@RequestBody AppUser appUser) throws Exception {
+    public List<AppUser> editAppUserAccount(@RequestBody AppUser appUser) throws RuntimeException {
         appUserService.editAppUserAccount(appUser);
         return appUserService.getAppUser();
+    }
+
+    @GetMapping(value = "/getAllMyPropertyByUserId/{userId}")
+    public AppUser getAllMyPropertyByUserId(@PathVariable("userId") long userId) {
+        return appUserService.getAllMyPropertyByUserId(userId);
+    }
+
+    @GetMapping(value = "/getOnlyOneOfMyProperty")
+    @ResponseBody
+    public Property getOnlyOneOfMyProperty(@RequestParam Long propertyId, @RequestParam Long userId) {
+        return appUserService.getOnlyOneOfMyProperty(propertyId, userId);
     }
 
 

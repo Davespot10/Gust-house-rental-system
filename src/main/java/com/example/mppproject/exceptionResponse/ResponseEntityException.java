@@ -4,6 +4,7 @@ import com.example.mppproject.Model.exception.ExceptionResponse;
 import com.example.mppproject.exceptionResponse.propertyException.PropertyBadRequestException;
 import com.example.mppproject.exceptionResponse.propertyException.PropertyNotFoundException;
 import com.example.mppproject.exceptionResponse.reservationException.ReservationNotFoundException;
+import com.example.mppproject.exceptionResponse.userException.UserBadRequestException;
 import com.example.mppproject.exceptionResponse.userException.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +42,7 @@ public class ResponseEntityException extends ResponseEntityExceptionHandler {
         return new ResponseEntity(message,HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(PropertyBadRequestException.class)
+    @ExceptionHandler({PropertyBadRequestException.class, UserBadRequestException.class})
     public ResponseEntity<ExceptionResponse> propertyBadRequest
             (Exception exception, WebRequest webRequest){
         ExceptionResponse message = new ExceptionResponse
