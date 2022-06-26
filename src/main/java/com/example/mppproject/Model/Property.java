@@ -3,9 +3,11 @@ package com.example.mppproject.Model;
 import com.example.mppproject.Model.Enum.ApprovedStatus;
 import com.example.mppproject.Model.Enum.Space;
 import com.example.mppproject.Model.Enum.Type;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -60,21 +62,12 @@ public class Property {
 
     @OneToMany(mappedBy = "property", orphanRemoval = true)
     private Set<Review> reviews = new LinkedHashSet<>();
-
-    @ManyToOne
-    @JoinColumn(name = "app_user_id")
-    private AppUser appUser;
-
-    public AppUser getAppUser() {
-        return appUser;
-    }
-
-    public void setAppUser(AppUser appUser) {
-        this.appUser = appUser;
-    }
-
     public Property(){}
 
+    public Property(Boolean availabiltyStatus,Double pricePerNight){
+        this.availabiltyStatus=availabiltyStatus;
+        this.pricePerNight=pricePerNight;
+    }
     public Property(String title, Type type, Space space, String description, Address address, Double pricePerNight, ApprovedStatus approvedStatus, Boolean availabiltyStatus, Integer capacity, Set<Reservation> reservations, HomeProperty homeProperty, Set<Review> reviews) {
         this.title = title;
         this.type = type;
@@ -194,4 +187,16 @@ public class Property {
         this.id = id;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Property property = (Property) o;
+        return id != null && Objects.equals(id, property.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

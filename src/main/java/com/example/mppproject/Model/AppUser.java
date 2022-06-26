@@ -46,7 +46,8 @@ public class AppUser {
     @JoinColumn(name = "account_id")
     private Account account;
 
-    @OneToMany(mappedBy = "appUser", orphanRemoval = true)
+    @OneToMany(orphanRemoval = true)
+    @JoinColumn(name = "app_user_id")
     private Set<Property> properties = new LinkedHashSet<>();
 
     public Set<Property> getProperties() {
