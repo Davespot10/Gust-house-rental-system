@@ -64,6 +64,10 @@ public class Property {
     private Set<Review> reviews = new LinkedHashSet<>();
     public Property(){}
 
+    public Property(Boolean availabiltyStatus,Double pricePerNight){
+        this.availabiltyStatus=availabiltyStatus;
+        this.pricePerNight=pricePerNight;
+    }
     public Property(String title, Type type, Space space, String description, Address address, Double pricePerNight, ApprovedStatus approvedStatus, Boolean availabiltyStatus, Integer capacity, Set<Reservation> reservations, HomeProperty homeProperty, Set<Review> reviews) {
         this.title = title;
         this.type = type;
