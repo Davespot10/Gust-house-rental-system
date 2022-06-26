@@ -59,7 +59,7 @@ public class PropertyController {
     ){
 
         Address address = new Address(state,city,country,zip_code,street_number,lat,lon);
-        HomeProperty homeProperty = new HomeProperty(Integer.parseInt(bath_room_number), Integer.parseInt(bed_number), Integer.parseInt(bed_room_number), description);
+        HomeProperty homeProperty = new HomeProperty(Integer.parseInt(bath_room_number), Integer.parseInt(bed_number), Integer.parseInt(bed_room_number), property_description);
         Property property = new Property(title, Type.valueOf(type), Space.valueOf(space),description,address
                 ,Double.parseDouble(price_per_night),
                 ApprovedStatus.PENDING,

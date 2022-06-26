@@ -2,6 +2,7 @@ package com.example.mppproject.Model;
 
 import javax.persistence.*;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -44,6 +45,18 @@ public class AppUser {
     @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "account_id")
     private Account account;
+
+    @OneToMany(orphanRemoval = true)
+    @JoinColumn(name = "app_user_id")
+    private Set<Property> properties = new LinkedHashSet<>();
+
+    public Set<Property> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(Set<Property> properties) {
+        this.properties = properties;
+    }
 
     public Account getAccount() {
         return account;

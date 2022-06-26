@@ -1,13 +1,9 @@
 package com.example.mppproject.Service;
 
 import com.example.mppproject.Model.Enum.ApprovedStatus;
-import com.example.mppproject.Model.Enum.Type;
 import com.example.mppproject.Model.Image;
 import com.example.mppproject.Model.Property;
-import com.example.mppproject.Repository.AddressRepository;
-import com.example.mppproject.Repository.HomePropertyRepository;
-import com.example.mppproject.Repository.ImageRepository;
-import com.example.mppproject.Repository.PropertyRepository;
+import com.example.mppproject.Repository.*;
 import com.example.mppproject.exceptionResponse.propertyException.PropertyBadRequestException;
 import com.example.mppproject.exceptionResponse.propertyException.PropertyNotFoundException;
 import com.google.cloud.storage.*;
@@ -99,12 +95,12 @@ public class PropertyService {
     public List<Property> getProperty() {
         return propertyRepository.findAll();
     }
-
     public Property getPropertyById(long id) {
         boolean exist = propertyRepository.existsById(id);
         if (!exist){
-            throw new IllegalStateException("student " + id + "does not exist");
+            throw new IllegalStateException("student id :" + id + " does not exist");
         }
+
         return  propertyRepository.findById(id);
     }
 
@@ -161,4 +157,5 @@ public class PropertyService {
         }
         throw new PropertyBadRequestException("You can not update the property");
     }
+
 }
