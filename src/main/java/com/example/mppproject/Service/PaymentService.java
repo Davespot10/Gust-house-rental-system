@@ -2,8 +2,10 @@ package com.example.mppproject.Service;
 
 import com.example.mppproject.Model.AppUser;
 import com.example.mppproject.Model.Payment;
+import com.example.mppproject.Model.Property;
 import com.example.mppproject.Model.Reservation;
 import com.example.mppproject.Repository.*;
+import com.example.mppproject.exceptionResponse.propertyException.PropertyNotFoundException;
 import com.example.mppproject.exceptionResponse.reservationException.ReservationCanceledByUserException;
 import com.example.mppproject.exceptionResponse.reservationException.ReservationDateExpiredException;
 import com.example.mppproject.exceptionResponse.reservationException.ReservationNotFoundException;
@@ -11,6 +13,9 @@ import com.example.mppproject.exceptionResponse.reservationException.Reservation
 import com.example.mppproject.exceptionResponse.userException.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PaymentService {
@@ -45,7 +50,6 @@ public class PaymentService {
 //            throw new ReservationDateExpiredException("Reservation is expired // Payment date is after reservation start date");
 //        }
 
-
         if(reservation.getReservationStatus().equals("EXPIRED")){
             throw new ReservationDateExpiredException("Reservation is expired // Payment date is after reservation start date");
         } else if (reservation.getReservationStatus().equals("CANCELLED")) {
@@ -58,6 +62,15 @@ public class PaymentService {
         if(appUser == null)
             throw new UserNotFoundException("User not found");
 
+        Property property = reservation.getProperty();
+        if(property == null)
+            throw new PropertyNotFoundException("Property not found");
+
+
+        Payment payment = new Payment();
+        payment.setAmount(reservation.getCalculatedPrice());
+        payment.setReservation(reservation);
+        payment.setGuestAppUser(reservation.getAppUser());
 
         return null;
     }

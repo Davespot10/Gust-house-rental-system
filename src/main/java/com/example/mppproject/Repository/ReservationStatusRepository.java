@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
 public interface ReservationStatusRepository extends JpaRepository<ReservationStatus, Long> {
 
 
-Optional<ReservationStatus>  findReservationStatusByStatusName(String status_name);
+Optional<ReservationStatus> findReservationStatusByStatusName(String StatusName);
 }
