@@ -23,8 +23,14 @@ public class AppUserController {
     }
 
     @PostMapping
-    public List<AppUser> SaveAppUser(@RequestBody AppUser appUser) {
+    public List<AppUser> saveAppUser(@RequestBody AppUser appUser) {
         appUserService.addAppUser(appUser);
+        return appUserService.getAppUser();
+    }
+
+    @PutMapping
+    public List<AppUser> editAppUserAccount(@RequestBody AppUser appUser) throws Exception {
+        appUserService.editAppUserAccount(appUser);
         return appUserService.getAppUser();
     }
 
