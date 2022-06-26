@@ -61,6 +61,18 @@ public class Property {
     @OneToMany(mappedBy = "property", orphanRemoval = true)
     private Set<Review> reviews = new LinkedHashSet<>();
 
+    @ManyToOne
+    @JoinColumn(name = "app_user_id")
+    private AppUser appUser;
+
+    public AppUser getAppUser() {
+        return appUser;
+    }
+
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
+    }
+
     public Property(){}
 
     public Property(String title, Type type, Space space, String description, Address address, Double pricePerNight, ApprovedStatus approvedStatus, Boolean availabiltyStatus, Integer capacity, Set<Reservation> reservations, HomeProperty homeProperty, Set<Review> reviews) {
