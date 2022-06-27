@@ -47,6 +47,8 @@ public class ReservationService {
         if(appUser == null)
             throw new UserNotFoundException("User not found");
 
+        System.out.println(property.getAvailabiltyStatus());
+
         if(!property.getAvailabiltyStatus())
             throw new PropertyAlreadyReservedException("The property is already reserved");
 
@@ -69,7 +71,11 @@ public class ReservationService {
         reservation.setRefNumber(refNumber);
         reservation.setReservationStatus(ReservationStatusEnum.PENDING);
 
+
+
         reservationRepository.save(reservation);
+        property.setAvailabiltyStatus(false);
+        propertyRepository.save(property);
 
         return reservation;
     }
