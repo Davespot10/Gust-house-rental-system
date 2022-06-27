@@ -40,11 +40,11 @@ public class AppUserController {
         return appUserService.getAllMyPropertyByUserId(userId);
     }
 
-    @GetMapping(value = "/getOnlyOneOfMyProperty")
-    @ResponseBody
-    public Property getOnlyOneOfMyProperty(@RequestParam Long propertyId, @RequestParam Long userId) {
-        return appUserService.getOnlyOneOfMyProperty(propertyId, userId);
-    }
+//    @GetMapping(value = "/getOnlyOneOfMyProperty")
+//    @ResponseBody
+//    public Property getOnlyOneOfMyProperty(@RequestParam Long propertyId, @RequestParam Long userId) {
+//        return appUserService.getOnlyOneOfMyProperty(propertyId, userId);
+//    }
 
 
 }

@@ -34,7 +34,9 @@ public class PropertyController {
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
-    public HashMap<Object, Object> createProperties(
+    public HashMap<String, Object> createProperties(
+                                                    //            user ID
+                                                    @RequestPart(value = "user_id", required = true) String user_id,
                                                     @RequestPart("capacity") String capacity
                                                     ,@RequestPart("title") String title
                                                     ,@RequestPart("description") String description
@@ -56,7 +58,7 @@ public class PropertyController {
                                                     ,@RequestPart("property_description") String property_description
 //                                                    Image fields
                                                     ,@RequestPart("images") List<MultipartFile> images
-    ){
+    ) throws IOException {
 
         Address address = new Address(state,city,country,zip_code,street_number,lat,lon);
         HomeProperty homeProperty = new HomeProperty(Integer.parseInt(bath_room_number), Integer.parseInt(bed_number), Integer.parseInt(bed_room_number), property_description);
@@ -65,13 +67,10 @@ public class PropertyController {
                 ApprovedStatus.PENDING,
                 false, Integer.parseInt(capacity), null, homeProperty,null);
 
-        Boolean result = propertyService.create(property, images);
-
-        if(result){
-            return OurResponses.okResponse(property);
-        }
-
-        return OurResponses.errorResponse();
+        Property result = propertyService.create(property, images, user_id);
+        HashMap<String, Object> resp = new HashMap<>();
+        resp.put("property", result);
+        return resp;
     }
 
 
@@ -89,7 +88,8 @@ public class PropertyController {
     public HashMap<Object, Object> updateProperties(
 //            Property Id
             @RequestPart(value = "property_id",required = true) String property_id
-
+//            user ID
+            ,@RequestPart(value = "user_id", required = true) String user_id
             ,@RequestPart(value = "capacity",required = false) String capacity
             ,@RequestPart(value = "title", required = false) String title
             ,@RequestPart(value = "description", required = false) String description
@@ -121,7 +121,7 @@ public class PropertyController {
                 false, Integer.parseInt(capacity), null, homeProperty,null);
         property.setId(Long.valueOf(property_id));
 
-        Object result = propertyService.update(property, images);
+        Object result = propertyService.update(property, images, user_id);
 
         return OurResponses.okResponse(result);
     }
