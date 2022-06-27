@@ -19,6 +19,14 @@ public class Role {
     @Column(name = "role_type")
     private RoleType roleType;
 
+    public Role(RoleType roleType) {
+        this.roleType = roleType;
+    }
+
+    public Role() {
+
+    }
+
     public RoleType getRoleType() {
         return roleType;
     }

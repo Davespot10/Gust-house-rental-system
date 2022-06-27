@@ -14,6 +14,13 @@ public class AppUser {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    public AppUser(String firstName,String userName) {
+        this.firstName = firstName;
+
+        this.userName = userName;
+
+    }
+
     @Column(name = "first_name")
     private String firstName;
 
@@ -49,6 +56,10 @@ public class AppUser {
     @OneToMany(orphanRemoval = true)
     @JoinColumn(name = "app_user_id")
     private Set<Property> properties = new LinkedHashSet<>();
+
+    public AppUser() {
+
+    }
 
     public Set<Property> getProperties() {
         return properties;
