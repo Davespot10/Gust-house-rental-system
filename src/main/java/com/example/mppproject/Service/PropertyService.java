@@ -1,11 +1,13 @@
 package com.example.mppproject.Service;
 
+import com.example.mppproject.Model.AppUser;
 import com.example.mppproject.Model.Enum.ApprovedStatus;
 import com.example.mppproject.Model.Image;
 import com.example.mppproject.Model.Property;
 import com.example.mppproject.Repository.*;
 import com.example.mppproject.exceptionResponse.propertyException.PropertyBadRequestException;
 import com.example.mppproject.exceptionResponse.propertyException.PropertyNotFoundException;
+import com.example.mppproject.exceptionResponse.userException.UserNotFoundException;
 import com.google.cloud.storage.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,16 +33,23 @@ public class PropertyService {
     private final PropertyRepository propertyRepository;
     private final HomePropertyRepository homePropertyRepository;
     private final ImageRepository imageRepository;
+    private final AppUserRepository appUserRepository;
 
-    public PropertyService(AddressRepository addressRepository, PropertyRepository propertyRepository, HomePropertyRepository homePropertyRepository, ImageRepository imageRepository) {
+    public PropertyService(AddressRepository addressRepository, PropertyRepository propertyRepository, HomePropertyRepository homePropertyRepository, ImageRepository imageRepository, AppUserRepository appUserRepository) {
         this.addressRepository = addressRepository;
         this.propertyRepository = propertyRepository;
         this.homePropertyRepository = homePropertyRepository;
         this.imageRepository = imageRepository;
+        this.appUserRepository = appUserRepository;
     }
 
     @Transactional
-    public Boolean create(Property property, List<MultipartFile> images) {
+    public Property create(Property property, List<MultipartFile> images, String user_id) throws IOException {
+        AppUser appUser= appUserRepository.findById(Long.parseLong(user_id));
+        if(appUser == null){
+            throw new UserNotFoundException("User not found");
+        }
+        property.setAppUser(appUser);
         List<Image> imagesArray = new ArrayList<>();
         try {
             for (int i = 0; i < images.size(); i++) {
@@ -68,8 +77,7 @@ public class PropertyService {
                 file.delete();
             }
         }catch (IOException ioException){
-            System.out.println(ioException.getMessage());
-            return false;
+            throw new IOException();
         }
         addressRepository.save(property.getAddress());
         homePropertyRepository.save(property.getHomeProperty());
@@ -78,7 +86,7 @@ public class PropertyService {
             imagesArray.get(i).setProperty(property);
             imageRepository.save(imagesArray.get(i));
         }
-        return true;
+        return property;
     }
 
     private File convertMultiPartToFile(MultipartFile file) throws IOException {
@@ -104,13 +112,18 @@ public class PropertyService {
         return  propertyRepository.findById(id);
     }
 
-    public Property update(Property property, List<MultipartFile> images) throws PropertyNotFoundException, IOException {
-        HashMap<Object, Object> response = new HashMap<>();
+    public Property update(Property property, List<MultipartFile> images, String user_id) throws PropertyNotFoundException, IOException {
+        AppUser appUser= appUserRepository.findById(Long.parseLong(user_id));
+        if(appUser == null){
+            throw new UserNotFoundException("User not found");
+        }
+        property.setAppUser(appUser);
         Optional<Property> p = propertyRepository.findById(property.getId());
         if(p.isEmpty()){
             throw new PropertyNotFoundException("Property with this Id not found");
         }
         Property p2 = p.get();
+
         List<Image> oldImages = imageRepository.findByProperty_Id(p2.getId());
         List<Long> oldId = new ArrayList<>();
         for(int i=0;i<oldImages.size();i++){
@@ -119,6 +132,19 @@ public class PropertyService {
 
         if(p2.getApprovedStatus().equals(ApprovedStatus.PENDING) ||
                 p2.getApprovedStatus().equals(ApprovedStatus.DISAPPROVED)){
+            p2.setAppUser(appUser);
+            p2.setTitle(property.getTitle());
+            p2.setType(property.getType());
+            p2.setSpace(property.getSpace());
+            p2.setDescription(property.getDescription());
+            p2.setAddress(property.getAddress());
+            p2.setPricePerNight(property.getPricePerNight());
+            p2.setApprovedStatus(property.getApprovedStatus());
+            p2.setAvailabiltyStatus(property.getAvailabiltyStatus());
+            p2.setCapacity(property.getCapacity());
+            p2.setReviews(null);
+            p2.setReservations(null);
+            p2.setHomeProperty(property.getHomeProperty());
             List<Image> imagesArray = new ArrayList<>();
             try {
                 imageRepository.deleteAllById(oldId);
@@ -156,6 +182,33 @@ public class PropertyService {
 
         }
         throw new PropertyBadRequestException("You can not update the property");
+    }
+
+    public List<Property> getAllMyPropertyByUserId(long appUserId) {
+        List<Property> listOfAppUserData = propertyRepository.findByAppUser_Id(appUserId);
+        if (listOfAppUserData.size() == 0) {
+            throw new UserNotFoundException("user does not exist");
+        }
+        return listOfAppUserData;
+    }
+
+        public Property getOnlyOneOfMyProperty(long propertyId, long userId) {
+        List<Property> listOfAppUserData = getAllMyPropertyByUserId(userId);
+        if (listOfAppUserData.size() == 0) {
+            throw new UserNotFoundException("user does not exist");
+        }
+        Property property = new Property();
+        for (Property property1 : listOfAppUserData) {
+            if (property1.getId().equals(propertyId)) {
+                property = property1;
+                return property;
+            }
+        }
+
+        if (property.getId() == null) {
+            throw new UserNotFoundException("Property value does not exist");
+        }
+        return property;
     }
 
 }
