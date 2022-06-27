@@ -101,15 +101,28 @@ public class PropertyService {
         return new Date().getTime() + "-" + Objects.requireNonNull(multiPart.getOriginalFilename()).replace(" ", "_");
     }
     public List<Property> getProperty() {
+        /*
+        * Get all images and find the property approved status and availability status
+        * */
         return propertyRepository.findAll();
     }
-    public Property getPropertyById(long id) {
-        boolean exist = propertyRepository.existsById(id);
-        if (!exist){
+    public HashMap<Object, Object> getPropertyById(long id) {
+        Optional<Property> exist = propertyRepository.findById(id);
+        if (exist.isEmpty()){
             throw new IllegalStateException("student id :" + id + " does not exist");
         }
 
-        return  propertyRepository.findById(id);
+        Property property = exist.get();
+
+        if(property.getApprovedStatus().equals(ApprovedStatus.APPROVED) && property.getAvailabiltyStatus().equals(true)){
+            List<Image> images = imageRepository.findByProperty_Id(property.getId());
+            HashMap<Object, Object> response = new HashMap<>();
+            response.put("property", property);
+            response.put("imagess", images);
+            return response;
+        }else{
+            throw new PropertyNotFoundException();
+        }
     }
 
     public Property update(Property property, List<MultipartFile> images, String user_id) throws PropertyNotFoundException, IOException {
@@ -142,8 +155,6 @@ public class PropertyService {
             p2.setApprovedStatus(property.getApprovedStatus());
             p2.setAvailabiltyStatus(property.getAvailabiltyStatus());
             p2.setCapacity(property.getCapacity());
-            p2.setReviews(null);
-            p2.setReservations(null);
             p2.setHomeProperty(property.getHomeProperty());
             List<Image> imagesArray = new ArrayList<>();
             try {

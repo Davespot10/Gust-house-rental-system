@@ -42,30 +42,13 @@ public class AppUser {
 
     }
 
-    @OneToMany(mappedBy = "appUser", orphanRemoval = true)
-    private Set<Review> reviews = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "appUser", orphanRemoval = true)
-    private Set<Reservation> reservations = new LinkedHashSet<>();
-
     @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "account_id")
     private Account account;
 
-    @OneToMany(orphanRemoval = true)
-    @JoinColumn(name = "app_user_id")
-    private Set<Property> properties = new LinkedHashSet<>();
 
     public AppUser() {
 
-    }
-
-    public Set<Property> getProperties() {
-        return properties;
-    }
-
-    public void setProperties(Set<Property> properties) {
-        this.properties = properties;
     }
 
     public Account getAccount() {
@@ -74,22 +57,6 @@ public class AppUser {
 
     public void setAccount(Account account) {
         this.account = account;
-    }
-
-    public Set<Reservation> getReservations() {
-        return reservations;
-    }
-
-    public void setReservations(Set<Reservation> reservations) {
-        this.reservations = reservations;
-    }
-
-    public Set<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(Set<Review> reviews) {
-        this.reviews = reviews;
     }
 
     public Address getAddress() {

@@ -3,11 +3,9 @@ package com.example.mppproject.Service;
 import com.example.mppproject.Model.AppUser;
 import com.example.mppproject.Model.Property;
 import com.example.mppproject.Model.Reservation;
-import com.example.mppproject.Model.ReservationStatus;
 import com.example.mppproject.Repository.AppUserRepository;
 import com.example.mppproject.Repository.PropertyRepository;
 import com.example.mppproject.Repository.ReservationRepository;
-import com.example.mppproject.Repository.ReservationStatusRepository;
 import com.example.mppproject.exceptionResponse.propertyException.PropertyNotFoundException;
 import com.example.mppproject.exceptionResponse.reservationException.InvalidDateException;
 import com.example.mppproject.exceptionResponse.reservationException.PropertyAlreadyReservedException;
@@ -22,18 +20,15 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final PropertyRepository propertyRepository;
     private final AppUserRepository appUserRepository;
-    private final ReservationStatusRepository reservationStatusRepository;
 
     public ReservationService(
             ReservationRepository reservationRepository,
             PropertyRepository propertyRepository,
-            AppUserRepository appUserRepository,
-            ReservationStatusRepository reservationStatusRepository
+            AppUserRepository appUserRepository
     ){
         this.reservationRepository = reservationRepository;
         this.propertyRepository = propertyRepository;
         this.appUserRepository = appUserRepository;
-        this.reservationStatusRepository = reservationStatusRepository;
     }
 
     public Reservation createReservation(Long appUserId, Long propertyId, Reservation reservation) {
@@ -64,13 +59,13 @@ public class ReservationService {
 
         String refNumber = generateRandomString(8);
 
-       ReservationStatus reservationStatus = reservationStatusRepository.findReservationStatusByStatusName("PENDING").stream().findFirst().orElse(null);
+//       ReservationStatus reservationStatus = reservationStatusRepository.findReservationStatusByStatusName("PENDING").stream().findFirst().orElse(null);
 
         reservation.setCalculatedPrice(calculatedPrice);
         reservation.setAppUser(appUser);
         reservation.setProperty(property);
         reservation.setRefNumber(refNumber);
-        reservation.setReservationStatus(reservationStatus);
+//        reservation.setReservationStatus(reservationStatus);
 
         reservationRepository.save(reservation);
 

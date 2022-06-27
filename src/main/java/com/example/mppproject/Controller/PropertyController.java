@@ -81,7 +81,7 @@ public class PropertyController {
     }
 
     @GetMapping(path = "{id}")
-    public Property getPropertyById(@PathVariable("id") long id) {
+    public HashMap<Object, Object> getPropertyById(@PathVariable("id") long id) {
         return propertyService.getPropertyById(id);
     }
 

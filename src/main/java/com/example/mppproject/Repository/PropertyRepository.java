@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface PropertyRepository extends JpaRepository<Property, Long> {
 
-   Property findById(long id);
+//   Property findById(long id);
 
     boolean existsById(long id);
 

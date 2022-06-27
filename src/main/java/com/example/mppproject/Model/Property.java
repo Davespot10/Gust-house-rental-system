@@ -53,15 +53,9 @@ public class Property {
     @Column(name = "capacity")
     private Integer capacity;
 
-    @OneToMany(mappedBy = "property", orphanRemoval = true)
-    private Set<Reservation> reservations = new LinkedHashSet<>();
-
     @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "home_property_id")
     private HomeProperty homeProperty;
-
-    @OneToMany(mappedBy = "property", orphanRemoval = true)
-    private Set<Review> reviews = new LinkedHashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "app_user_id")
@@ -91,17 +85,7 @@ public class Property {
         this.approvedStatus = approvedStatus;
         this.availabiltyStatus = availabiltyStatus;
         this.capacity = capacity;
-        this.reservations = reservations;
         this.homeProperty = homeProperty;
-        this.reviews = reviews;
-    }
-
-    public Set<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(Set<Review> reviews) {
-        this.reviews = reviews;
     }
 
     public HomeProperty getHomeProperty() {
@@ -110,14 +94,6 @@ public class Property {
 
     public void setHomeProperty(HomeProperty homeProperty) {
         this.homeProperty = homeProperty;
-    }
-
-    public Set<Reservation> getReservations() {
-        return reservations;
-    }
-
-    public void setReservations(Set<Reservation> reservations) {
-        this.reservations = reservations;
     }
 
     public Integer getCapacity() {

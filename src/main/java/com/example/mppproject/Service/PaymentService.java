@@ -21,7 +21,6 @@ public class PaymentService {
     private final ReservationRepository reservationRepository;
     private final PropertyRepository propertyRepository;
     private final AppUserRepository appUserRepository;
-    private final ReservationStatusRepository reservationStatusRepository;
 
     private final PaymentRepository paymentRepository;
     private final AccountRepository accountRepository;
@@ -32,13 +31,11 @@ public class PaymentService {
             PropertyRepository propertyRepository,
             AppUserRepository appUserRepository,
             PaymentRepository paymentRepository,
-            ReservationStatusRepository reservationStatusRepository,
             AccountRepository accountRepository
     ){
         this.reservationRepository = reservationRepository;
         this.propertyRepository = propertyRepository;
         this.appUserRepository = appUserRepository;
-        this.reservationStatusRepository = reservationStatusRepository;
         this.paymentRepository = paymentRepository;
         this.accountRepository = accountRepository;
     }
@@ -52,13 +49,13 @@ public class PaymentService {
 //            throw new ReservationDateExpiredException("Reservation is expired // Payment date is after reservation start date");
 //        }
 
-        if(reservation.getReservationStatus().equals("EXPIRED")){
-            throw new ReservationDateExpiredException("Reservation is expired // Payment date is after reservation start date");
-        } else if (reservation.getReservationStatus().equals("CANCELLED")) {
-            throw new ReservationCanceledByUserException("Reservation is canceled by user");
-        } else if (reservation.getReservationStatus().equals("RESERVED")) {
-            throw new ReservationPaymentIsMadeException("User already paid for the reservation");
-        }
+//        if(reservation.getReservationStatus().equals("EXPIRED")){
+//            throw new ReservationDateExpiredException("Reservation is expired // Payment date is after reservation start date");
+//        } else if (reservation.getReservationStatus().equals("CANCELLED")) {
+//            throw new ReservationCanceledByUserException("Reservation is canceled by user");
+//        } else if (reservation.getReservationStatus().equals("RESERVED")) {
+//            throw new ReservationPaymentIsMadeException("User already paid for the reservation");
+//        }
 
         AppUser appUser = appUserRepository.findById(appUserId).stream().findFirst().orElse(null);
         if(appUser == null)
@@ -83,7 +80,7 @@ public class PaymentService {
     public void makePayment(Payment payment){
         Account guestAccount = payment.getGuestAppUser().getAccount();
         Account hostAccount = payment.getHostAppUser().getAccount();
-        ReservationStatus resStat = payment.getReservation().getReservationStatus();
+//        ReservationStatus resStat = payment.getReservation().getReservationStatus();
 
         if(payment.getAmount() < guestAccount.getBalance()){
             System.out.println("Error");
@@ -95,9 +92,9 @@ public class PaymentService {
         accountRepository.save(guestAccount);
         accountRepository.save(hostAccount);
 
-        resStat.setStatus_name(String.valueOf(ReservationStatusEnum.RESERVED));
-
-        reservationStatusRepository.save(resStat);
+//        resStat.setStatus_name(String.valueOf(ReservationStatusEnum.RESERVED));
+//
+//        reservationStatusRepository.save(resStat);
 
         paymentRepository.save(payment);
 

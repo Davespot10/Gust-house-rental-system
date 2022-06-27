@@ -34,18 +34,6 @@ public class Reservation {
     @Column(name = "ref_number", nullable = false, unique = true)
     private String refNumber;
 
-    @ManyToOne
-    @JoinColumn(name = "reservation_status_id")
-    private ReservationStatus reservationStatus;
-
-    public ReservationStatus getReservationStatus() {
-        return reservationStatus;
-    }
-
-    public void setReservationStatus(ReservationStatus reservationStatus) {
-        this.reservationStatus = reservationStatus;
-    }
-
     public String getRefNumber() {
         return refNumber;
     }
