@@ -2,6 +2,7 @@ package com.example.mppproject.Controller;
 
 import com.example.mppproject.Config.OurResponses;
 import com.example.mppproject.Model.Address;
+import com.example.mppproject.Model.AppUser;
 import com.example.mppproject.Model.Enum.ApprovedStatus;
 import com.example.mppproject.Model.Enum.Space;
 import com.example.mppproject.Model.Enum.Type;
@@ -124,5 +125,16 @@ public class PropertyController {
         Object result = propertyService.update(property, images, user_id);
 
         return OurResponses.okResponse(result);
+    }
+
+    @GetMapping(value = "/getAllMyPropertyByUserId/{userId}")
+    public List<Property> getAllMyPropertyByUserId(@PathVariable("userId") long userId) {
+        return propertyService.getAllMyPropertyByUserId(userId);
+    }
+
+    @GetMapping(value = "/getOnlyOneOfMyProperty")
+    @ResponseBody
+    public Property getOnlyOneOfMyProperty(@RequestParam Long propertyId, @RequestParam Long userId) {
+        return propertyService.getOnlyOneOfMyProperty(propertyId, userId);
     }
 }

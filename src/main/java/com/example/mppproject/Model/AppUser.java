@@ -35,6 +35,11 @@ public class AppUser {
     @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "address_id")
     private Address address;
+    public AppUser(String firstName, String userName) {
+        this.firstName = firstName;
+        this.userName = userName;
+
+    }
 
     @OneToMany(mappedBy = "appUser", orphanRemoval = true, cascade=CascadeType.ALL)
     private Set<Review> reviews = new LinkedHashSet<>();
@@ -45,6 +50,22 @@ public class AppUser {
     @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "account_id")
     private Account account;
+
+    @OneToMany(orphanRemoval = true)
+    @JoinColumn(name = "app_user_id")
+    private Set<Property> properties = new LinkedHashSet<>();
+
+    public AppUser() {
+
+    }
+
+    public Set<Property> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(Set<Property> properties) {
+        this.properties = properties;
+    }
 
     public Account getAccount() {
         return account;

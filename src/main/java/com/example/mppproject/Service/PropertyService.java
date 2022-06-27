@@ -194,4 +194,31 @@ public class PropertyService {
         throw new PropertyBadRequestException("You can not update the property");
     }
 
+    public List<Property> getAllMyPropertyByUserId(long appUserId) {
+        List<Property> listOfAppUserData = propertyRepository.findByAppUser_Id(appUserId);
+        if (listOfAppUserData.size() == 0) {
+            throw new UserNotFoundException("user does not exist");
+        }
+        return listOfAppUserData;
+    }
+
+        public Property getOnlyOneOfMyProperty(long propertyId, long userId) {
+        List<Property> listOfAppUserData = getAllMyPropertyByUserId(userId);
+        if (listOfAppUserData.size() == 0) {
+            throw new UserNotFoundException("user does not exist");
+        }
+        Property property = new Property();
+        for (Property property1 : listOfAppUserData) {
+            if (property1.getId().equals(propertyId)) {
+                property = property1;
+                return property;
+            }
+        }
+
+        if (property.getId() == null) {
+            throw new UserNotFoundException("Property value does not exist");
+        }
+        return property;
+    }
+
 }

@@ -5,11 +5,11 @@ import com.example.mppproject.Model.ReservationStatus;
 import jdk.jfr.Registered;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface ReservationStatusRepository extends JpaRepository<ReservationStatus, Long> {
-
+public interface ReservationStatusRepository extends CrudRepository<ReservationStatus, Long> {
 
 Optional<ReservationStatus> findReservationStatusByStatusName(String StatusName);
+
 }

@@ -1,9 +1,7 @@
 package com.example.mppproject.Service;
 
-import com.example.mppproject.Model.AppUser;
-import com.example.mppproject.Model.Payment;
-import com.example.mppproject.Model.Property;
-import com.example.mppproject.Model.Reservation;
+import com.example.mppproject.Model.*;
+import com.example.mppproject.Model.Enum.ReservationStatusEnum;
 import com.example.mppproject.Repository.*;
 import com.example.mppproject.exceptionResponse.propertyException.PropertyNotFoundException;
 import com.example.mppproject.exceptionResponse.reservationException.ReservationCanceledByUserException;
@@ -14,6 +12,7 @@ import com.example.mppproject.exceptionResponse.userException.UserNotFoundExcept
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +24,7 @@ public class PaymentService {
     private final ReservationStatusRepository reservationStatusRepository;
 
     private final PaymentRepository paymentRepository;
+    private final AccountRepository accountRepository;
 
     @Autowired
     public PaymentService(
@@ -32,13 +32,15 @@ public class PaymentService {
             PropertyRepository propertyRepository,
             AppUserRepository appUserRepository,
             PaymentRepository paymentRepository,
-            ReservationStatusRepository reservationStatusRepository
+            ReservationStatusRepository reservationStatusRepository,
+            AccountRepository accountRepository
     ){
         this.reservationRepository = reservationRepository;
         this.propertyRepository = propertyRepository;
         this.appUserRepository = appUserRepository;
         this.reservationStatusRepository = reservationStatusRepository;
         this.paymentRepository = paymentRepository;
+        this.accountRepository = accountRepository;
     }
     public Payment createPayment(String refNumber, Long appUserId) {
         Reservation reservation = reservationRepository.findReservationByRefNumber(refNumber).stream().findFirst().orElse(null);
@@ -66,12 +68,38 @@ public class PaymentService {
         if(property == null)
             throw new PropertyNotFoundException("Property not found");
 
-
         Payment payment = new Payment();
         payment.setAmount(reservation.getCalculatedPrice());
         payment.setReservation(reservation);
         payment.setGuestAppUser(reservation.getAppUser());
+        payment.setHostAppUser(property.getAppUser());
 
-        return null;
+        makePayment(payment);
+
+        return payment;
+    }
+
+    @Transactional
+    public void makePayment(Payment payment){
+        Account guestAccount = payment.getGuestAppUser().getAccount();
+        Account hostAccount = payment.getHostAppUser().getAccount();
+        ReservationStatus resStat = payment.getReservation().getReservationStatus();
+
+        if(payment.getAmount() < guestAccount.getBalance()){
+            System.out.println("Error");
+        }
+
+        guestAccount.setBalance(guestAccount.getBalance() - payment.getAmount());
+        hostAccount.setBalance(guestAccount.getBalance() - payment.getAmount());
+
+        accountRepository.save(guestAccount);
+        accountRepository.save(hostAccount);
+
+        resStat.setStatus_name(String.valueOf(ReservationStatusEnum.RESERVED));
+
+        reservationStatusRepository.save(resStat);
+
+        paymentRepository.save(payment);
+
     }
 }
