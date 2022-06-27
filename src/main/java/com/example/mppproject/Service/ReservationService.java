@@ -1,6 +1,7 @@
 package com.example.mppproject.Service;
 
 import com.example.mppproject.Model.AppUser;
+import com.example.mppproject.Model.Enum.ReservationStatusEnum;
 import com.example.mppproject.Model.Property;
 import com.example.mppproject.Model.Reservation;
 import com.example.mppproject.Repository.AppUserRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.List;
 
 @Service
 public class ReservationService {
@@ -59,13 +61,13 @@ public class ReservationService {
 
         String refNumber = generateRandomString(8);
 
-//       ReservationStatus reservationStatus = reservationStatusRepository.findReservationStatusByStatusName("PENDING").stream().findFirst().orElse(null);
+
 
         reservation.setCalculatedPrice(calculatedPrice);
         reservation.setAppUser(appUser);
         reservation.setProperty(property);
         reservation.setRefNumber(refNumber);
-//        reservation.setReservationStatus(reservationStatus);
+        reservation.setReservationStatus(ReservationStatusEnum.PENDING);
 
         reservationRepository.save(reservation);
 
@@ -86,5 +88,14 @@ public class ReservationService {
             else
                 randomString += java.util.UUID.randomUUID().toString().replaceAll("-", "");
         }
+    }
+
+    public List<Reservation> getReservations() {
+        return  reservationRepository.findAll();
+    }
+
+    public Reservation getReservationByRef(String refNumber) {
+
+       return reservationRepository.findReservationByRefNumber(refNumber).stream().findFirst().orElse(null);
     }
 }
