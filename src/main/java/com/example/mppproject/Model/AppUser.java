@@ -36,10 +36,10 @@ public class AppUser {
     @JoinColumn(name = "address_id")
     private Address address;
 
-    @OneToMany(mappedBy = "appUser", orphanRemoval = true)
+    @OneToMany(mappedBy = "appUser", orphanRemoval = true, cascade=CascadeType.ALL)
     private Set<Review> reviews = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "appUser", orphanRemoval = true)
+    @OneToMany(mappedBy = "appUser", orphanRemoval = true, cascade=CascadeType.ALL)
     private Set<Reservation> reservations = new LinkedHashSet<>();
 
     @OneToOne(orphanRemoval = true)

@@ -20,7 +20,7 @@ public class Image {
     @Column(name = "caption")
     private String caption;
 
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "property_id")
     private Property property;
 

@@ -114,6 +114,12 @@ public class PropertyService {
 
     public Property update(Property property, List<MultipartFile> images, String user_id) throws PropertyNotFoundException, IOException {
         AppUser appUser= appUserRepository.findById(Long.parseLong(user_id));
+        for(int i=0;i<images.size();i++){
+            System.out.println(images.get(i).getSize());
+//            if(images.get(i).getSize() > 10000){
+//
+//            }
+        }
         if(appUser == null){
             throw new UserNotFoundException("User not found");
         }
@@ -142,12 +148,11 @@ public class PropertyService {
             p2.setApprovedStatus(property.getApprovedStatus());
             p2.setAvailabiltyStatus(property.getAvailabiltyStatus());
             p2.setCapacity(property.getCapacity());
-            p2.setReviews(null);
-            p2.setReservations(null);
+//            p2.setReviews(null);
+//            p2.setReservations(null);
             p2.setHomeProperty(property.getHomeProperty());
             List<Image> imagesArray = new ArrayList<>();
             try {
-                imageRepository.deleteAllById(oldId);
                 for (int i = 0; i < images.size(); i++) {
                     String objectName = generateFileName(images.get(i));
 
@@ -170,10 +175,15 @@ public class PropertyService {
                     imagesArray.add(image);
                     file.delete();
                 }
+
+
+                propertyRepository.save(p2);
                 for(int i=0;i<imagesArray.size();i++){
                     imagesArray.get(i).setProperty(p2);
                     imageRepository.save(imagesArray.get(i));
                 }
+                imageRepository.deleteAllById(oldId);
+
             }catch (IOException ioException){
                 System.out.println(ioException.getMessage());
                 throw new IOException();

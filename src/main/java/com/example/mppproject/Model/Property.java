@@ -36,7 +36,7 @@ public class Property {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade=CascadeType.ALL)
     @JoinColumn(name = "address_id", nullable = false)
     private Address address;
 
@@ -53,15 +53,15 @@ public class Property {
     @Column(name = "capacity")
     private Integer capacity;
 
-    @OneToMany(mappedBy = "property", orphanRemoval = true)
-    private Set<Reservation> reservations = new LinkedHashSet<>();
+//    @OneToMany(mappedBy = "property", orphanRemoval = true, cascade=CascadeType.ALL)
+//    private Set<Reservation> reservations = new LinkedHashSet<>();
 
-    @OneToOne(orphanRemoval = true)
+    @OneToOne(orphanRemoval = true, cascade=CascadeType.ALL)
     @JoinColumn(name = "home_property_id")
     private HomeProperty homeProperty;
 
-    @OneToMany(mappedBy = "property", orphanRemoval = true)
-    private Set<Review> reviews = new LinkedHashSet<>();
+//    @OneToMany(mappedBy = "property", orphanRemoval = true, cascade=CascadeType.ALL)
+//    private Set<Review> reviews = new LinkedHashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "app_user_id")
@@ -91,18 +91,16 @@ public class Property {
         this.approvedStatus = approvedStatus;
         this.availabiltyStatus = availabiltyStatus;
         this.capacity = capacity;
-        this.reservations = reservations;
         this.homeProperty = homeProperty;
-        this.reviews = reviews;
     }
 
-    public Set<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(Set<Review> reviews) {
-        this.reviews = reviews;
-    }
+//    public Set<Review> getReviews() {
+//        return reviews;
+//    }
+//
+//    public void setReviews(Set<Review> reviews) {
+//        this.reviews = reviews;
+//    }
 
     public HomeProperty getHomeProperty() {
         return homeProperty;
@@ -112,13 +110,13 @@ public class Property {
         this.homeProperty = homeProperty;
     }
 
-    public Set<Reservation> getReservations() {
-        return reservations;
-    }
-
-    public void setReservations(Set<Reservation> reservations) {
-        this.reservations = reservations;
-    }
+//    public Set<Reservation> getReservations() {
+//        return reservations;
+//    }
+//
+//    public void setReservations(Set<Reservation> reservations) {
+//        this.reservations = reservations;
+//    }
 
     public Integer getCapacity() {
         return capacity;

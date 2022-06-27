@@ -16,7 +16,7 @@ public class ReservationStatus {
     private Long id;
 
 
-    @OneToMany(mappedBy = "reservationStatus", orphanRemoval = true)
+    @OneToMany(mappedBy = "reservationStatus", orphanRemoval = true, cascade=CascadeType.ALL)
     private Set<Reservation> reservations = new LinkedHashSet<>();
 
     @Column(name = "status_name", nullable = false, unique = true)
