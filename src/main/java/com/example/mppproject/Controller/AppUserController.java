@@ -35,16 +35,7 @@ public class AppUserController {
         return appUserService.getAppUser();
     }
 
-    @GetMapping(value = "/getAllMyPropertyByUserId/{userId}")
-    public AppUser getAllMyPropertyByUserId(@PathVariable("userId") long userId) {
-        return appUserService.getAllMyPropertyByUserId(userId);
-    }
 
-//    @GetMapping(value = "/getOnlyOneOfMyProperty")
-//    @ResponseBody
-//    public Property getOnlyOneOfMyProperty(@RequestParam Long propertyId, @RequestParam Long userId) {
-//        return appUserService.getOnlyOneOfMyProperty(propertyId, userId);
-//    }
 
 
 }

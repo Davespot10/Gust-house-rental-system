@@ -16,8 +16,7 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
 //    List<Property> findByIdAndApprovedStatus(Long id, ApprovedStatus approvedStatus);
 //
 //    List<Property> findByAppUser(long appUserId);
-//
-//    List<Property> findBytitle(String best);
+    List<Property> findByAppUser_Id(long appUserId);
 
     List<Property> findByCapacity(int i);
 
