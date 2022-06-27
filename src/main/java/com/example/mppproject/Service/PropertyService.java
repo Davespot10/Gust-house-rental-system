@@ -158,7 +158,6 @@ public class PropertyService {
             p2.setHomeProperty(property.getHomeProperty());
             List<Image> imagesArray = new ArrayList<>();
             try {
-                imageRepository.deleteAllById(oldId);
                 for (int i = 0; i < images.size(); i++) {
                     String objectName = generateFileName(images.get(i));
 
@@ -181,10 +180,15 @@ public class PropertyService {
                     imagesArray.add(image);
                     file.delete();
                 }
+
+
+                propertyRepository.save(p2);
                 for(int i=0;i<imagesArray.size();i++){
                     imagesArray.get(i).setProperty(p2);
                     imageRepository.save(imagesArray.get(i));
                 }
+                imageRepository.deleteAllById(oldId);
+
             }catch (IOException ioException){
                 System.out.println(ioException.getMessage());
                 throw new IOException();

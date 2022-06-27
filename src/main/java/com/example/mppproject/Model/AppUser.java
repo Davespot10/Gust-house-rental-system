@@ -35,7 +35,6 @@ public class AppUser {
     @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "address_id")
     private Address address;
-
     public AppUser(String firstName, String userName) {
         this.firstName = firstName;
         this.userName = userName;
