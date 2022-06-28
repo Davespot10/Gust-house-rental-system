@@ -1,7 +1,6 @@
 package com.example.mppproject.Model;
 
 import javax.persistence.*;
-import java.util.UUID;
 
 @Entity
 @Table(name = "image")
@@ -20,17 +19,9 @@ public class Image {
     @Column(name = "caption")
     private String caption;
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "property_id")
     private Property property;
-
-    public Image(){}
-
-    public Image(String url, String extension, String caption) {
-        this.url = url;
-        this.extension = extension;
-        this.caption = caption;
-    }
 
     public Property getProperty() {
         return property;
@@ -38,6 +29,14 @@ public class Image {
 
     public void setProperty(Property property) {
         this.property = property;
+    }
+
+    public Image(){}
+
+    public Image(String url, String extension, String caption) {
+        this.url = url;
+        this.extension = extension;
+        this.caption = caption;
     }
 
     public String getCaption() {
