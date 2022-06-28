@@ -43,7 +43,7 @@ public class PropertyService {
         this.appUserRepository = appUserRepository;
     }
 
-    @Transactional
+    @Transactional // Host Authenticated
     public Property create(Property property, List<MultipartFile> images, String user_id) throws IOException {
         AppUser appUser= appUserRepository.findById(Long.parseLong(user_id));
         if(appUser == null){
@@ -101,6 +101,8 @@ public class PropertyService {
     private String generateFileName(MultipartFile multiPart) {
         return new Date().getTime() + "-" + Objects.requireNonNull(multiPart.getOriginalFilename()).replace(" ", "_");
     }
+
+//    ALL No authentication
     public List<Property> getProperty() {
         /*
         * Get all images and find the property approved status and availability status
@@ -108,6 +110,8 @@ public class PropertyService {
         List<Property> properties = propertyRepository.findAll();
         return properties;
     }
+
+//    ALL No authentication
     public HashMap<Object, Object> getPropertyById(long id) {
         Optional<Property> exist = propertyRepository.findById(id);
         if (exist.isEmpty()){
@@ -127,6 +131,7 @@ public class PropertyService {
         }
     }
 
+//    Host Authenticated
     public Property update(Property property, List<MultipartFile> images, String user_id) throws PropertyNotFoundException, IOException {
         AppUser appUser= appUserRepository.findById(Long.parseLong(user_id));
         if(appUser == null){
@@ -201,6 +206,8 @@ public class PropertyService {
         throw new PropertyBadRequestException("You can not update the property");
     }
 
+//    Host Authenticated
+
     public List<Property> getAllMyPropertyByUserId(long appUserId) {
         List<Property> listOfAppUserData = propertyRepository.findByAppUser_Id(appUserId);
         if (listOfAppUserData.size() == 0) {
@@ -209,6 +216,7 @@ public class PropertyService {
         return listOfAppUserData;
     }
 
+//    Host Authenticated
         public Property getOnlyOneOfMyProperty(long propertyId, long userId) {
         List<Property> listOfAppUserData = getAllMyPropertyByUserId(userId);
         if (listOfAppUserData.size() == 0) {

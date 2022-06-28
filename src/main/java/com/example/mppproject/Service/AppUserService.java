@@ -27,10 +27,12 @@ public class AppUserService {
         this.accountRepository = accountRepository;
     }
 
+//    Admin Authenticated
     public List<AppUser> getAppUser() {
         return appUserRepository.findAll();
     }
 
+//    Not Authenticated and Authorized
     public AppUser addAppUser(AppUser appUser) {
         Optional<AppUser> usernameEntry = appUserRepository.findByUserName(appUser.getUserName());
         if (usernameEntry.isPresent()) {
@@ -50,6 +52,7 @@ public class AppUserService {
 
     }
 
+//    Admin and Authenticated
     public Optional<AppUser> editAppUserAccount(AppUser appUser) throws RuntimeException {
         Long userId = appUser.getId();
         Optional<AppUser> existingUser = appUserRepository.findById(userId);
