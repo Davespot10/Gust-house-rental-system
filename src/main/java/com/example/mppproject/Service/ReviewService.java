@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.el.PropertyNotFoundException;
+import java.util.List;
 
 @Service
 public class ReviewService {
@@ -46,5 +47,11 @@ public class ReviewService {
 
         reviewRepository.save(review);
         return review;
+    }
+
+    public List<Review> getReviewsForProperty(Long propertyId) {
+
+        return  reviewRepository.findAllByPropertyId(propertyId);
+
     }
 }

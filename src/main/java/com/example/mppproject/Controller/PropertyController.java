@@ -140,9 +140,15 @@ public class PropertyController {
         return propertyService.getOnlyOneOfMyProperty(propertyId, userId);
     }
 
-    @PostMapping(path = "/{id}/{userId}/review")
-    public ResponseEntity<Review> createReview( @PathVariable("id") Long id, @PathVariable("userId") Long userId, @RequestBody Review review) {
-        Review newReview = reviewService.createReview(id, userId, review);
+    @GetMapping("/{propertyId}/reviews")
+    public ResponseEntity<List<Review> > getReviewsForProperty(@PathVariable("propertyId") Long propertyId){
+        List<Review> newReview = reviewService.getReviewsForProperty(propertyId);
         return new ResponseEntity<>(newReview, HttpStatus.ACCEPTED);
     }
+    @PostMapping(path = "/{propertyId}/{userId}/review")
+    public ResponseEntity<Review> createReview( @PathVariable("propertyId") Long propertyId, @PathVariable("userId") Long userId, @RequestBody Review review) {
+        Review newReview = reviewService.createReview(propertyId, userId, review);
+        return new ResponseEntity<>(newReview, HttpStatus.ACCEPTED);
+    }
+
 }
