@@ -6,15 +6,12 @@ import com.example.mppproject.Model.Enum.Type;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.UUID;
-
-// TODO: Home propertiy is not inserted
 
 
 @Entity
+
 @Table(name = "property")
 public class Property {
     @Id
@@ -33,7 +30,7 @@ public class Property {
     @Column(name = "space", nullable = false)
     private Space space;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     private String description;
 
     @ManyToOne(optional = false)
@@ -61,6 +58,16 @@ public class Property {
     @JoinColumn(name = "app_user_id")
     private AppUser appUser;
 
+    @Column(name = "cover_image")
+    private String cover_image;
+
+    public String getCover_image() {
+        return cover_image;
+    }
+
+    public void setCover_image(String cover_image) {
+        this.cover_image = cover_image;
+    }
     public Property(String title,
                     Type type,
                     Space space,

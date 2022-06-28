@@ -79,6 +79,7 @@ public class PropertyService {
         }catch (IOException ioException){
             throw new IOException();
         }
+        property.setCover_image(imagesArray.get(0).getUrl());
         addressRepository.save(property.getAddress());
         homePropertyRepository.save(property.getHomeProperty());
         propertyRepository.save(property);
@@ -104,12 +105,13 @@ public class PropertyService {
         /*
         * Get all images and find the property approved status and availability status
         * */
-        return propertyRepository.findAll();
+        List<Property> properties = propertyRepository.findAll();
+        return properties;
     }
     public HashMap<Object, Object> getPropertyById(long id) {
         Optional<Property> exist = propertyRepository.findById(id);
         if (exist.isEmpty()){
-            throw new IllegalStateException("student id :" + id + " does not exist");
+            throw new PropertyNotFoundException("student id :" + id + " does not exist");
         }
 
         Property property = exist.get();
@@ -181,7 +183,7 @@ public class PropertyService {
                     file.delete();
                 }
 
-
+                p2.setCover_image(imagesArray.get(0).getUrl());
                 propertyRepository.save(p2);
                 for(int i=0;i<imagesArray.size();i++){
                     imagesArray.get(i).setProperty(p2);

@@ -20,7 +20,7 @@ public class HomeProperty {
     @Column(name = "bed_room_number")
     private Integer bedRoomNumber;
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
     public HomeProperty(){}
