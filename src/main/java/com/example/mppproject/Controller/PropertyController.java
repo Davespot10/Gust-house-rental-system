@@ -1,19 +1,19 @@
 package com.example.mppproject.Controller;
 
 import com.example.mppproject.Config.OurResponses;
-import com.example.mppproject.Model.Address;
-import com.example.mppproject.Model.AppUser;
+import com.example.mppproject.Model.*;
 import com.example.mppproject.Model.Enum.ApprovedStatus;
 import com.example.mppproject.Model.Enum.Space;
 import com.example.mppproject.Model.Enum.Type;
-import com.example.mppproject.Model.HomeProperty;
-import com.example.mppproject.Model.Property;
 import com.example.mppproject.Service.PropertyService;
+import com.example.mppproject.Service.ReviewService;
 import com.example.mppproject.exceptionResponse.propertyException.PropertyBadRequestException;
 import com.example.mppproject.exceptionResponse.propertyException.PropertyNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.availability.AvailabilityState;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,10 +28,12 @@ import java.util.UUID;
 public class PropertyController {
 
     private final PropertyService propertyService;
+    private final ReviewService reviewService;
 
     @Autowired
-    public PropertyController(PropertyService propertyService){
+    public PropertyController(PropertyService propertyService, ReviewService reviewService){
         this.propertyService = propertyService;
+        this.reviewService = reviewService;
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -137,4 +139,27 @@ public class PropertyController {
     public Property getOnlyOneOfMyProperty(@RequestParam Long propertyId, @RequestParam Long userId) {
         return propertyService.getOnlyOneOfMyProperty(propertyId, userId);
     }
+
+    @GetMapping("/{propertyId}/reviews")
+    public ResponseEntity<List<Review> > getReviewsForProperty(@PathVariable("propertyId") Long propertyId){
+        List<Review> newReview = reviewService.getReviewsForProperty(propertyId);
+        return new ResponseEntity<>(newReview, HttpStatus.ACCEPTED);
+    }
+    @PostMapping(path = "/{propertyId}/{userId}/review")
+    public ResponseEntity<Review> createReview( @PathVariable("propertyId") Long propertyId, @PathVariable("userId") Long userId, @RequestBody Review review) {
+        Review newReview = reviewService.createReview(propertyId, userId, review);
+        return new ResponseEntity<>(newReview, HttpStatus.ACCEPTED);
+    }
+
+    @PutMapping(path = "/review/{reviewId}")
+    public ResponseEntity<Review> updateReview( @PathVariable("reviewId") Long reviewId,  @RequestBody Review review) {
+        Review newReview = reviewService.updateReview(reviewId, review);
+        return new ResponseEntity<>(review, HttpStatus.ACCEPTED);
+    }
+    @DeleteMapping(path = "/review/{reviewId}")
+    public ResponseEntity<String> deleteReview( @PathVariable("reviewId") Long reviewId,  @RequestBody Review review) {
+        String delReview = reviewService.deleteReview(reviewId);
+        return new ResponseEntity<>(delReview, HttpStatus.ACCEPTED);
+    }
+
 }

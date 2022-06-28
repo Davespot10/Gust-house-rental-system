@@ -4,15 +4,13 @@ import com.example.mppproject.Model.*;
 import com.example.mppproject.Model.Enum.ReservationStatusEnum;
 import com.example.mppproject.Repository.*;
 import com.example.mppproject.exceptionResponse.propertyException.PropertyNotFoundException;
-import com.example.mppproject.exceptionResponse.reservationException.ReservationCanceledByUserException;
-import com.example.mppproject.exceptionResponse.reservationException.ReservationDateExpiredException;
-import com.example.mppproject.exceptionResponse.reservationException.ReservationNotFoundException;
-import com.example.mppproject.exceptionResponse.reservationException.ReservationPaymentIsMadeException;
+import com.example.mppproject.exceptionResponse.reservationException.*;
 import com.example.mppproject.exceptionResponse.userException.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,57 +42,58 @@ public class PaymentService {
         if(reservation == null){
             throw new ReservationNotFoundException("Reservation not found with this reference number");
         }
-//        LocalDate startDate = LocalDate.parse(reservation.getStartDate());
-//        if(LocalDate.now().isAfter(startDate)){
-//            throw new ReservationDateExpiredException("Reservation is expired // Payment date is after reservation start date");
-//        }
+        LocalDate startDate = LocalDate.parse(reservation.getStartDate());
+        if(LocalDate.now().isAfter(startDate)){
+            throw new ReservationDateExpiredException("Reservation is expired // Payment date is after reservation start date");
+        }
 
-//        if(reservation.getReservationStatus().equals("EXPIRED")){
-//            throw new ReservationDateExpiredException("Reservation is expired // Payment date is after reservation start date");
-//        } else if (reservation.getReservationStatus().equals("CANCELLED")) {
-//            throw new ReservationCanceledByUserException("Reservation is canceled by user");
-//        } else if (reservation.getReservationStatus().equals("RESERVED")) {
-//            throw new ReservationPaymentIsMadeException("User already paid for the reservation");
-//        }
+        if(reservation.getReservationStatus().equals(ReservationStatusEnum.EXPIRED)){
+            throw new ReservationDateExpiredException("Reservation is expired // Payment date is after reservation start date");
+        } else if (reservation.getReservationStatus().equals(ReservationStatusEnum.CANCELLED)) {
+            throw new ReservationCanceledByUserException("Reservation is canceled by user");
+        } else if (reservation.getReservationStatus().equals(ReservationStatusEnum.RESERVED)) {
+            throw new ReservationPaymentIsMadeException("User already paid for the reservation");
+        }
 
-        AppUser appUser = appUserRepository.findById(appUserId).stream().findFirst().orElse(null);
-        if(appUser == null)
+        AppUser guestAppUser = appUserRepository.findById(appUserId).stream().findFirst().orElse(null);
+        if(guestAppUser == null)
             throw new UserNotFoundException("User not found");
 
         Property property = reservation.getProperty();
-        if(property == null)
-            throw new PropertyNotFoundException("Property not found");
 
+        AppUser hostAppUser = property.getAppUser();
         Payment payment = new Payment();
         payment.setAmount(reservation.getCalculatedPrice());
         payment.setReservation(reservation);
-        payment.setGuestAppUser(reservation.getAppUser());
-        payment.setHostAppUser(property.getAppUser());
+        payment.setGuestAppUser(guestAppUser);
+        payment.setHostAppUser(hostAppUser);
 
-        makePayment(payment);
+        makePayment(payment, reservation, guestAppUser, hostAppUser);
 
         return payment;
     }
 
     @Transactional
-    public void makePayment(Payment payment){
-        Account guestAccount = payment.getGuestAppUser().getAccount();
-        Account hostAccount = payment.getHostAppUser().getAccount();
-//        ReservationStatus resStat = payment.getReservation().getReservationStatus();
+    public void makePayment(Payment payment, Reservation reservation, AppUser guestAppUser, AppUser hostAppUser){
 
-        if(payment.getAmount() < guestAccount.getBalance()){
-            System.out.println("Error");
+        double totalPayment = reservation.getCalculatedPrice();
+        double guestBalance = guestAppUser.getAccount().getBalance();
+        double hostBalance = hostAppUser.getAccount().getBalance();
+
+        if(totalPayment > guestBalance){
+            throw new InsufficientBalanceException("Insufficient balance to make payment");
         }
 
-        guestAccount.setBalance(guestAccount.getBalance() - payment.getAmount());
-        hostAccount.setBalance(guestAccount.getBalance() - payment.getAmount());
+        guestBalance = guestBalance-totalPayment;
+        guestAppUser.getAccount().setBalance(guestBalance);
+        accountRepository.save(guestAppUser.getAccount());
 
-        accountRepository.save(guestAccount);
-        accountRepository.save(hostAccount);
+        hostBalance = hostBalance + totalPayment;
+        hostAppUser.getAccount().setBalance(hostBalance);
+        accountRepository.save(hostAppUser.getAccount());
 
-//        resStat.setStatus_name(String.valueOf(ReservationStatusEnum.RESERVED));
-//
-//        reservationStatusRepository.save(resStat);
+        reservation.setReservationStatus(ReservationStatusEnum.RESERVED);
+        reservationRepository.save(reservation);
 
         paymentRepository.save(payment);
 

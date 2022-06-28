@@ -1,5 +1,6 @@
 package com.example.mppproject.Model;
 
+import com.example.mppproject.Model.Enum.ReservationStatusEnum;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -33,6 +34,17 @@ public class Reservation {
 
     @Column(name = "ref_number", nullable = false, unique = true)
     private String refNumber;
+
+    @Column(name = "reservation_status")
+    private ReservationStatusEnum reservationStatus;
+
+    public ReservationStatusEnum getReservationStatus() {
+        return reservationStatus;
+    }
+
+    public void setReservationStatus(ReservationStatusEnum reservationStatus) {
+        this.reservationStatus = reservationStatus;
+    }
 
     public String getRefNumber() {
         return refNumber;

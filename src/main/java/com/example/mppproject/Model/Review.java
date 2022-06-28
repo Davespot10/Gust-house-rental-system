@@ -14,8 +14,7 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "review")
-    private String review;
+
 
     @ManyToOne
     @JoinColumn(name = "app_user_id")
@@ -24,6 +23,12 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "property_id")
     private Property property;
+
+    @Lob
+    @Column(name = "review")
+    private String review;
+
+
 
     public Property getProperty() {
         return property;

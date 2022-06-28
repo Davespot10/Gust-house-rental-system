@@ -18,14 +18,11 @@ public class ImageSeed implements CommandLineRunner {
 
 //    private void loadData() {
 //        if (imageRepository.count() == 0) {
-//            Image data1 = new Image("Iowa", "Fairfiled", "USA", "52557", "1000 N 4th Street", "41°24'12.2\"N", "2°10'26.5\"E");
-//            Image data2 = new Image("Addis Ababa", "Addis Ababa", "Ethiopia", "52557", "1000 N 4th Street", "41°24'12.2\"N", "2°10'26.5\"E");
-//            Image data3 = new Image("Nairobi", "Nairobi", "Kenya", "12506", "1000 N 4th Street", "41°24'12.2\"N", "2°10'26.5\"E");
-//            Image data4 = new Image("Iowa", "Iowa City", "USA", "12354", "1000 N 4th Street", "41°24'12.2\"N", "2°10'26.5\"E");
+//            Image data1 = new Image("data:image/jpeg;base64,/9j/4AAQSkZ", "jpeg", "data:image/jpeg");
+//
 //
 //            imageRepository.save(data1);
-//            imageRepository.save(data2);
-//            imageRepository.save(data3);
-//            imageRepository.save(data4);
+//
 //        }
+//    }
 }
