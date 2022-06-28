@@ -111,7 +111,7 @@ public class PropertyService {
     public HashMap<Object, Object> getPropertyById(long id) {
         Optional<Property> exist = propertyRepository.findById(id);
         if (exist.isEmpty()){
-            throw new IllegalStateException("student id :" + id + " does not exist");
+            throw new PropertyNotFoundException("student id :" + id + " does not exist");
         }
 
         Property property = exist.get();
