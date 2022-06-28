@@ -17,7 +17,7 @@ public class AppUser {
     @Column(name = "first_name")
     private String firstName;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "app_user_id"),
             inverseJoinColumns = @JoinColumn(name = "roles_id"))

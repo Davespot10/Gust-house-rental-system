@@ -13,12 +13,14 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import javax.servlet.http.HttpServletResponse;
+
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
-    private UserDetailsService userDetailsService;
-    @Autowired
     private JwtRequestFilter jwtRequestFilter;
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService);
@@ -29,11 +31,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 disable().
                 authorizeRequests()
                 .antMatchers("/authenticate").permitAll()
-                //.antMatchers("/departments").permitAll()
-                .antMatchers("/departments/{id}").hasRole("ADMIN").anyRequest().authenticated()
+                .antMatchers("/api/v1/property").permitAll()
+                .antMatchers("/api/v1/property{id}").hasAnyAuthority("ADMIN")
+                .anyRequest().authenticated()
                 .and()
 //                .formLogin().and()
-                .exceptionHandling().and().sessionManagement()
+                .exceptionHandling()
+                .authenticationEntryPoint(
+                        (request, response, authException) ->
+                                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")
+                ).and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
