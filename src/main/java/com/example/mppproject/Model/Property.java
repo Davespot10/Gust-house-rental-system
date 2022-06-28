@@ -68,6 +68,29 @@ public class Property {
     public void setCover_image(String cover_image) {
         this.cover_image = cover_image;
     }
+    public Property(String title,
+                    Type type,
+                    Space space,
+                    String description,
+                    Address address,
+                    Double pricePerNight,
+                    ApprovedStatus approvedStatus,
+                    Boolean availabiltyStatus,
+                    Integer capacity,
+                    HomeProperty homeProperty,
+                    AppUser appUser) {
+        this.title = title;
+        this.type = type;
+        this.space = space;
+        this.description = description;
+        this.address = address;
+        this.pricePerNight = pricePerNight;
+        this.approvedStatus = approvedStatus;
+        this.availabiltyStatus = availabiltyStatus;
+        this.capacity = capacity;
+        this.homeProperty = homeProperty;
+        this.appUser = appUser;
+    }
 
     public AppUser getAppUser() {
         return appUser;

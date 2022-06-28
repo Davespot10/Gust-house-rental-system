@@ -38,6 +38,22 @@ public class Reservation {
     @Column(name = "reservation_status")
     private ReservationStatusEnum reservationStatus;
 
+    public Reservation(Double calculatedPrice,
+                       String startDate,
+                       String endDate,
+                       AppUser appUser,
+                       Property property,
+                       String refNumber,
+                       ReservationStatusEnum reservationStatus) {
+        this.calculatedPrice = calculatedPrice;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.appUser = appUser;
+        this.property = property;
+        this.refNumber = refNumber;
+        this.reservationStatus = reservationStatus;
+    }
+
     public ReservationStatusEnum getReservationStatus() {
         return reservationStatus;
     }
