@@ -30,7 +30,7 @@ public class Property {
     @Column(name = "space", nullable = false)
     private Space space;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     private String description;
 
     @ManyToOne(optional = false)
