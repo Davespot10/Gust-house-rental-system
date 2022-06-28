@@ -5,12 +5,14 @@ import com.example.mppproject.Repository.AppUserRepository;
 import com.example.mppproject.Repository.PropertyRepository;
 import com.example.mppproject.Repository.ReservationRepository;
 import com.example.mppproject.Repository.ReviewRepository;
+import com.example.mppproject.exceptionResponse.reviewException.ReviewNotFoundException;
 import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.el.PropertyNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReviewService {
@@ -54,4 +56,30 @@ public class ReviewService {
         return  reviewRepository.findAllByPropertyId(propertyId);
 
     }
+
+    public Review updateReview(Long reviewId, Review review) {
+        Optional<Review> opt = reviewRepository.findById(reviewId);
+        if(opt.isPresent()){
+            Review oldReview = opt.get();
+            if(review.getReview() != null){ //and the current user is the owner of this review
+                oldReview.setReview(review.getReview());
+            }
+            reviewRepository.save(oldReview);
+            return oldReview;
+        }else{
+            throw new ReviewNotFoundException("Review not found for update");
+        }
+
+    }
+
+    public String deleteReview(Long reviewId) {
+        Optional<Review> review = reviewRepository.findById(reviewId);
+        if(review.isPresent()) { //&& the logg in user is the owner
+            reviewRepository.delete(review.get());
+        }else{
+            throw new ReviewNotFoundException("Review not found for delete");
+        }
+      return "Successfully deleted review from the database";
+    }
 }
+

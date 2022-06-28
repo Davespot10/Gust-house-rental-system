@@ -39,11 +39,10 @@ public class ReservationController {
                                                          @PathVariable("appUserId") Long appUserId,
                                                          @PathVariable("propertyId") Long propertyId
     ){
-
-
-       Reservation newReservation = reservationService.createReservation(appUserId, propertyId, reservation);
+        Reservation newReservation = reservationService.createReservation(appUserId, propertyId, reservation);
        return new ResponseEntity<Reservation>(newReservation, HttpStatus.ACCEPTED);
     }
+
 
 
 }

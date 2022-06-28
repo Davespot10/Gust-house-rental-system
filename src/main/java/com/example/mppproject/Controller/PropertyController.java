@@ -151,4 +151,15 @@ public class PropertyController {
         return new ResponseEntity<>(newReview, HttpStatus.ACCEPTED);
     }
 
+    @PutMapping(path = "/review/{reviewId}")
+    public ResponseEntity<Review> updateReview( @PathVariable("reviewId") Long reviewId,  @RequestBody Review review) {
+        Review newReview = reviewService.updateReview(reviewId, review);
+        return new ResponseEntity<>(review, HttpStatus.ACCEPTED);
+    }
+    @DeleteMapping(path = "/review/{reviewId}")
+    public ResponseEntity<String> deleteReview( @PathVariable("reviewId") Long reviewId,  @RequestBody Review review) {
+        String delReview = reviewService.deleteReview(reviewId);
+        return new ResponseEntity<>(delReview, HttpStatus.ACCEPTED);
+    }
+
 }
