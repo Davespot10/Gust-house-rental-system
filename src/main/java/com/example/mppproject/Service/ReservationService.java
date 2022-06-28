@@ -100,7 +100,7 @@ public class ReservationService {
 
         return reservation;
     }
-    private double calculatePrice(int numberOfDays, double pricePerNight){
+    public double calculatePrice(int numberOfDays, double pricePerNight){
 
         return numberOfDays*pricePerNight;
 
