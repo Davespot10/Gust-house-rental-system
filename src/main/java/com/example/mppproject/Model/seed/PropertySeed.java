@@ -5,6 +5,7 @@ import com.example.mppproject.Model.Enum.ApprovedStatus;
 import com.example.mppproject.Model.Enum.Space;
 import com.example.mppproject.Model.Enum.Type;
 import com.example.mppproject.Repository.*;
+import com.example.mppproject.utility.RandomGenerator;
 import org.hibernate.annotations.common.reflection.XProperty;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -24,6 +25,7 @@ public class PropertySeed implements CommandLineRunner {
     private final AddressRepository addressRepository;
     private final AccountRepository accountRepository;
 
+
     public PropertySeed(PropertyRepository propertyRepository,
                         HomePropertyRepository homepropertyRepository,
                         AppUserRepository appUserRepository,
@@ -39,7 +41,7 @@ public class PropertySeed implements CommandLineRunner {
     public void run(String... args) throws Exception {
         loadData();
     }
-    private void loadData() {
+     void loadData() {
         if (propertyRepository.count() == 0) {
 
             Property property = new Property();
@@ -63,15 +65,10 @@ public class PropertySeed implements CommandLineRunner {
             property.setTitle("Entire home hosted by Wende");
             Address address = new Address("Iowa", "Iowa City", "USA", "12354", "1000 N 4th Street", "41°24'12.2\"N", "2°10'26.5\"E");
             property.setAddress(address);
-            Random rnd = new Random();
-            int number = rnd.nextInt(99);
-           String name = generateString(4);
-            String email = name + number + "@gmail.com";
-            AppUser appUser = new AppUser(name,email);
 
-            number = rnd.nextInt(999999);
+            AppUser appUser = new AppUser(RandomGenerator.generateName(5),RandomGenerator.generateEmail());
 
-            Account account = new Account(number, 5000.0);
+            Account account = new Account(RandomGenerator.generateAccount(), 5000.0);
             appUser.setAccount(account);
             appUser.setAddress(address);
             property.setAppUser(appUser);
@@ -84,30 +81,6 @@ public class PropertySeed implements CommandLineRunner {
 
             propertyRepository.save(property);
 
-            }
-
-
-
-
-
-    }
-
-    private String generateString(int n){
-
-        String AlphaNumericString ="abcdefghijklmnopqrstuvxyz";
-
-        StringBuilder sb = new StringBuilder(n);
-
-        for (int i = 0; i < n; i++) {
-
-            int index
-                    = (int)(AlphaNumericString.length()
-                    * Math.random());
-
-            sb.append(AlphaNumericString
-                    .charAt(index));
         }
-
-        return sb.toString();
     }
 }

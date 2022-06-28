@@ -22,23 +22,24 @@ public class ReservationController {
     public ReservationController(ReservationService reservationService){
         this.reservationService = reservationService;
     }
-
-    @GetMapping
+//reservation for properties
+    @GetMapping //admin
     public ResponseEntity<List<Reservation>> getReservations(){
         List<Reservation> reservations = reservationService.getReservations();
         return new ResponseEntity<List<Reservation>>(reservations, HttpStatus.ACCEPTED);
     }
 
-    @GetMapping(path = "/{refNum}")
-    public ResponseEntity<Reservation> getResrvationByRef(@PathVariable("refNum") String refNum){
-        Reservation reservation = reservationService.getReservationByRef(refNum);
+    @GetMapping(path = "/{referenceNumber}") //admin and guest
+    public ResponseEntity<Reservation> getResrvationByRef(@PathVariable("referenceNumber") String referenceNumber){
+        Reservation reservation = reservationService.getReservationByRef(referenceNumber);
         return new ResponseEntity<>(reservation, HttpStatus.ACCEPTED);
     }
-    @PostMapping(path = "{appUserId}/{propertyId}")
+    @PostMapping(path = "{appUserId}/{propertyId}") //guest
     public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation,
                                                          @PathVariable("appUserId") Long appUserId,
                                                          @PathVariable("propertyId") Long propertyId
     ){
+
         Reservation newReservation = reservationService.createReservation(appUserId, propertyId, reservation);
        return new ResponseEntity<Reservation>(newReservation, HttpStatus.ACCEPTED);
     }

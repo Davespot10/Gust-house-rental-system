@@ -54,6 +54,10 @@ public class Reservation {
         this.reservationStatus = reservationStatus;
     }
 
+    public Reservation() {
+
+    }
+
     public ReservationStatusEnum getReservationStatus() {
         return reservationStatus;
     }

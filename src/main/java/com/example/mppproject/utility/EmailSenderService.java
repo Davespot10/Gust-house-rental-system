@@ -9,12 +9,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailSenderService {
     @Autowired
-    private final JavaMailSender mailSender;
-    public EmailSenderService(JavaMailSender mailSender){
-        this.mailSender=mailSender;
-    }
+    private static JavaMailSender mailSender;
 
-    public void sendEmail(String toEmail, String subject, String body){
+
+    public static void sendEmail(String toEmail, String subject, String body){
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom("dmznew.reservations@gmail.com");
         simpleMailMessage.setTo(toEmail);
