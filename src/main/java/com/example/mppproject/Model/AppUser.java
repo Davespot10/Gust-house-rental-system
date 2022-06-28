@@ -14,6 +14,22 @@ public class AppUser {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    public AppUser(String firstName,
+                   String lastName,
+                   String userName,
+                   Set<Role> roles,
+                   String password,
+                   Address address,
+                   Account account) {
+        this.firstName = firstName;
+        this.roles = roles;
+        this.lastName = lastName;
+        this.userName = userName;
+        this.password = password;
+        this.address = address;
+        this.account = account;
+    }
+
     @Column(name = "first_name")
     private String firstName;
 
@@ -35,16 +51,20 @@ public class AppUser {
     @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "address_id")
     private Address address;
+    public AppUser(String firstName, String userName) {
+        this.firstName = firstName;
+        this.userName = userName;
 
-    @OneToMany(mappedBy = "appUser", orphanRemoval = true)
-    private Set<Review> reviews = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "appUser", orphanRemoval = true)
-    private Set<Reservation> reservations = new LinkedHashSet<>();
+    }
 
     @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "account_id")
     private Account account;
+
+
+    public AppUser() {
+
+    }
 
     public Account getAccount() {
         return account;
@@ -52,22 +72,6 @@ public class AppUser {
 
     public void setAccount(Account account) {
         this.account = account;
-    }
-
-    public Set<Reservation> getReservations() {
-        return reservations;
-    }
-
-    public void setReservations(Set<Reservation> reservations) {
-        this.reservations = reservations;
-    }
-
-    public Set<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(Set<Review> reviews) {
-        this.reviews = reviews;
     }
 
     public Address getAddress() {

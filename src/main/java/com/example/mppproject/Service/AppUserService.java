@@ -31,7 +31,7 @@ public class AppUserService {
         return appUserRepository.findAll();
     }
 
-    public void addAppUser(AppUser appUser) {
+    public AppUser addAppUser(AppUser appUser) {
         Optional<AppUser> usernameEntry = appUserRepository.findByUserName(appUser.getUserName());
         if (usernameEntry.isPresent()) {
             throw new UserBadRequestException("Username already exists!");
@@ -46,7 +46,7 @@ public class AppUserService {
         Account account = accountRepository.save(appUser.getAccount());
         appUser.setAddress(address);
         appUser.setAccount(account);
-        appUserRepository.save(appUser);
+        return appUserRepository.save(appUser);
 
     }
 
@@ -72,30 +72,7 @@ public class AppUserService {
         return appUserRepository.findById(userId);
     }
 
-    public AppUser getAllMyPropertyByUserId(long appUserId) {
-        AppUser listOfAppUserData = appUserRepository.findById(appUserId);
-        if (listOfAppUserData == null) {
-            throw new UserNotFoundException("user does not exist");
-        }
-        return listOfAppUserData;
-    }
 
-//    public Property getOnlyOneOfMyProperty(long propertyId, long userId) {
-//        AppUser listOfAppUserData = getAllMyPropertyByUserId(userId);
-//        if (listOfAppUserData == null) {
-//            throw new UserNotFoundException("user does not exist");
-//        }
-//        Property property = new Property();
-//        for (Property property1 : listOfAppUserData.getProperties()) {
-//            if (property1.getId().equals(propertyId)) {
-//                property = property1;
-//                return property;
-//            }
-//        }
-//
-//        if (property.getId() == null) {
-//            throw new UserNotFoundException("Property value does not exist");
-//        }
-//        return property;
-//    }
+
+
 }

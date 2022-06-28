@@ -1,5 +1,6 @@
 package com.example.mppproject.Model;
 
+import com.example.mppproject.Model.Enum.ReservationStatusEnum;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -23,26 +24,45 @@ public class Reservation {
     @Column(name = "end_date")
     private String endDate;
 
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "app_user_id")
     private AppUser appUser;
 
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "property_id")
     private Property property;
 
     @Column(name = "ref_number", nullable = false, unique = true)
     private String refNumber;
 
-    @ManyToOne
-    @JoinColumn(name = "reservation_status_id")
-    private ReservationStatus reservationStatus;
+    @Column(name = "reservation_status")
+    private ReservationStatusEnum reservationStatus;
 
-    public ReservationStatus getReservationStatus() {
+    public Reservation(Double calculatedPrice,
+                       String startDate,
+                       String endDate,
+                       AppUser appUser,
+                       Property property,
+                       String refNumber,
+                       ReservationStatusEnum reservationStatus) {
+        this.calculatedPrice = calculatedPrice;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.appUser = appUser;
+        this.property = property;
+        this.refNumber = refNumber;
+        this.reservationStatus = reservationStatus;
+    }
+
+    public Reservation() {
+
+    }
+
+    public ReservationStatusEnum getReservationStatus() {
         return reservationStatus;
     }
 
-    public void setReservationStatus(ReservationStatus reservationStatus) {
+    public void setReservationStatus(ReservationStatusEnum reservationStatus) {
         this.reservationStatus = reservationStatus;
     }
 

@@ -79,6 +79,7 @@ public class PropertyService {
         }catch (IOException ioException){
             throw new IOException();
         }
+        property.setCover_image(imagesArray.get(0).getUrl());
         addressRepository.save(property.getAddress());
         homePropertyRepository.save(property.getHomeProperty());
         propertyRepository.save(property);
@@ -101,15 +102,29 @@ public class PropertyService {
         return new Date().getTime() + "-" + Objects.requireNonNull(multiPart.getOriginalFilename()).replace(" ", "_");
     }
     public List<Property> getProperty() {
-        return propertyRepository.findAll();
+        /*
+        * Get all images and find the property approved status and availability status
+        * */
+        List<Property> properties = propertyRepository.findAll();
+        return properties;
     }
-    public Property getPropertyById(long id) {
-        boolean exist = propertyRepository.existsById(id);
-        if (!exist){
-            throw new IllegalStateException("student id :" + id + " does not exist");
+    public HashMap<Object, Object> getPropertyById(long id) {
+        Optional<Property> exist = propertyRepository.findById(id);
+        if (exist.isEmpty()){
+            throw new PropertyNotFoundException("student id :" + id + " does not exist");
         }
 
-        return  propertyRepository.findById(id);
+        Property property = exist.get();
+
+        if(property.getApprovedStatus().equals(ApprovedStatus.APPROVED) && property.getAvailabiltyStatus().equals(true)){
+            List<Image> images = imageRepository.findByProperty_Id(property.getId());
+            HashMap<Object, Object> response = new HashMap<>();
+            response.put("property", property);
+            response.put("imagess", images);
+            return response;
+        }else{
+            throw new PropertyNotFoundException();
+        }
     }
 
     public Property update(Property property, List<MultipartFile> images, String user_id) throws PropertyNotFoundException, IOException {
@@ -142,12 +157,9 @@ public class PropertyService {
             p2.setApprovedStatus(property.getApprovedStatus());
             p2.setAvailabiltyStatus(property.getAvailabiltyStatus());
             p2.setCapacity(property.getCapacity());
-            p2.setReviews(null);
-            p2.setReservations(null);
             p2.setHomeProperty(property.getHomeProperty());
             List<Image> imagesArray = new ArrayList<>();
             try {
-                imageRepository.deleteAllById(oldId);
                 for (int i = 0; i < images.size(); i++) {
                     String objectName = generateFileName(images.get(i));
 
@@ -170,10 +182,15 @@ public class PropertyService {
                     imagesArray.add(image);
                     file.delete();
                 }
+
+                p2.setCover_image(imagesArray.get(0).getUrl());
+                propertyRepository.save(p2);
                 for(int i=0;i<imagesArray.size();i++){
                     imagesArray.get(i).setProperty(p2);
                     imageRepository.save(imagesArray.get(i));
                 }
+                imageRepository.deleteAllById(oldId);
+
             }catch (IOException ioException){
                 System.out.println(ioException.getMessage());
                 throw new IOException();
@@ -182,6 +199,33 @@ public class PropertyService {
 
         }
         throw new PropertyBadRequestException("You can not update the property");
+    }
+
+    public List<Property> getAllMyPropertyByUserId(long appUserId) {
+        List<Property> listOfAppUserData = propertyRepository.findByAppUser_Id(appUserId);
+        if (listOfAppUserData.size() == 0) {
+            throw new UserNotFoundException("user does not exist");
+        }
+        return listOfAppUserData;
+    }
+
+        public Property getOnlyOneOfMyProperty(long propertyId, long userId) {
+        List<Property> listOfAppUserData = getAllMyPropertyByUserId(userId);
+        if (listOfAppUserData.size() == 0) {
+            throw new UserNotFoundException("user does not exist");
+        }
+        Property property = new Property();
+        for (Property property1 : listOfAppUserData) {
+            if (property1.getId().equals(propertyId)) {
+                property = property1;
+                return property;
+            }
+        }
+
+        if (property.getId() == null) {
+            throw new UserNotFoundException("Property value does not exist");
+        }
+        return property;
     }
 
 }

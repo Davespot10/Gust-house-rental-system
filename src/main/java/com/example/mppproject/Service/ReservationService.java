@@ -1,40 +1,49 @@
 package com.example.mppproject.Service;
 
 import com.example.mppproject.Model.AppUser;
+import com.example.mppproject.Model.Enum.ReservationStatusEnum;
 import com.example.mppproject.Model.Property;
 import com.example.mppproject.Model.Reservation;
-import com.example.mppproject.Model.ReservationStatus;
 import com.example.mppproject.Repository.AppUserRepository;
 import com.example.mppproject.Repository.PropertyRepository;
 import com.example.mppproject.Repository.ReservationRepository;
-import com.example.mppproject.Repository.ReservationStatusRepository;
 import com.example.mppproject.exceptionResponse.propertyException.PropertyNotFoundException;
 import com.example.mppproject.exceptionResponse.reservationException.InvalidDateException;
 import com.example.mppproject.exceptionResponse.reservationException.PropertyAlreadyReservedException;
 import com.example.mppproject.exceptionResponse.userException.UserNotFoundException;
+import com.example.mppproject.utility.EmailSenderService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.List;
 
 @Service
 public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final PropertyRepository propertyRepository;
     private final AppUserRepository appUserRepository;
-    private final ReservationStatusRepository reservationStatusRepository;
+    private final EmailSenderService emailSenderService;
 
+    @Autowired
     public ReservationService(
             ReservationRepository reservationRepository,
             PropertyRepository propertyRepository,
             AppUserRepository appUserRepository,
-            ReservationStatusRepository reservationStatusRepository
+            EmailSenderService emailSenderService
     ){
         this.reservationRepository = reservationRepository;
         this.propertyRepository = propertyRepository;
         this.appUserRepository = appUserRepository;
-        this.reservationStatusRepository = reservationStatusRepository;
+        this.emailSenderService = emailSenderService;
     }
+
+
+
+
 
     public Reservation createReservation(Long appUserId, Long propertyId, Reservation reservation) {
 
@@ -50,6 +59,8 @@ public class ReservationService {
         if(appUser == null)
             throw new UserNotFoundException("User not found");
 
+
+
         if(!property.getAvailabiltyStatus())
             throw new PropertyAlreadyReservedException("The property is already reserved");
 
@@ -64,19 +75,32 @@ public class ReservationService {
 
         String refNumber = generateRandomString(8);
 
-       ReservationStatus reservationStatus = reservationStatusRepository.findReservationStatusByStatusName("PENDING").stream().findFirst().orElse(null);
+
 
         reservation.setCalculatedPrice(calculatedPrice);
         reservation.setAppUser(appUser);
         reservation.setProperty(property);
         reservation.setRefNumber(refNumber);
-        reservation.setReservationStatus(reservationStatus);
+        reservation.setReservationStatus(ReservationStatusEnum.PENDING);
 
         reservationRepository.save(reservation);
+        property.setAvailabiltyStatus(false);
+        propertyRepository.save(property);
+
+        String emailTo = appUser.getUserName();
+        String emailSubject = "DMZNeW Reservations - reservation conformation";
+        String emailBody = "Dear " + appUser.getFirstName() + " " + appUser.getLastName() +",\n"+
+                "This is an automated email that confirms your reservation. Please do not reply to this email.\n"+
+                "Confirmation number: " +reservation.getRefNumber()+"\n"+
+                "Date: "+ LocalDate.now().toString() +"\n";
+
+
+
+        emailSenderService.sendEmail(emailTo, emailSubject, emailBody);
 
         return reservation;
     }
-    private double calculatePrice(int numberOfDays, double pricePerNight){
+    public double calculatePrice(int numberOfDays, double pricePerNight){
 
         return numberOfDays*pricePerNight;
 
@@ -91,5 +115,19 @@ public class ReservationService {
             else
                 randomString += java.util.UUID.randomUUID().toString().replaceAll("-", "");
         }
+    }
+
+    public List<Reservation> getReservations() {
+        return  reservationRepository.findAll();
+    }
+
+    public Reservation getReservationByRef(String refNumber) {
+
+       return reservationRepository.findReservationByRefNumber(refNumber).stream().findFirst().orElse(null);
+    }
+
+    public Reservation cancelReservation(Long refNumber) {
+
+        return null;
     }
 }

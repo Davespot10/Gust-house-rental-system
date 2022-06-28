@@ -1,11 +1,9 @@
 package com.example.mppproject.Repository;
 
-import com.example.mppproject.Model.Address;
+import com.example.mppproject.Model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
 @Repository
-public interface AddressRepository extends JpaRepository<Address, Long> {
-
+public interface RoleRepository extends JpaRepository<Role, Long> {
 }

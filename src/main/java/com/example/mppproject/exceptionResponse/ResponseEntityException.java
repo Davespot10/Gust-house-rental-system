@@ -4,6 +4,7 @@ import com.example.mppproject.Model.exception.ExceptionResponse;
 import com.example.mppproject.exceptionResponse.propertyException.PropertyBadRequestException;
 import com.example.mppproject.exceptionResponse.propertyException.PropertyNotFoundException;
 import com.example.mppproject.exceptionResponse.reservationException.*;
+import com.example.mppproject.exceptionResponse.reviewException.ReviewNotFoundException;
 import com.example.mppproject.exceptionResponse.userException.UserBadRequestException;
 import com.example.mppproject.exceptionResponse.userException.UserNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,7 @@ public class ResponseEntityException extends ResponseEntityExceptionHandler {
     @ExceptionHandler({
             ReservationNotFoundException.class,
             UserNotFoundException.class,
+            ReviewNotFoundException.class,
             PropertyNotFoundException.class
     })
     public ResponseEntity<ExceptionResponse> NotFoundException
@@ -85,5 +87,11 @@ public class ResponseEntityException extends ResponseEntityExceptionHandler {
                 (new Date(), HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
         return new ResponseEntity(message,HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
+    @ExceptionHandler(InsufficientBalanceException.class)
+    public ResponseEntity<ExceptionResponse> InsufficientBalanceException
+            (Exception exception, WebRequest webRequest){
+        ExceptionResponse message = new ExceptionResponse
+                (new Date(), HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
+        return new ResponseEntity(message,HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

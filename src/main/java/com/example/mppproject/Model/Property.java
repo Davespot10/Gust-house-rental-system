@@ -6,15 +6,12 @@ import com.example.mppproject.Model.Enum.Type;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.UUID;
-
-// TODO: Home propertiy is not inserted
 
 
 @Entity
+
 @Table(name = "property")
 public class Property {
     @Id
@@ -33,7 +30,7 @@ public class Property {
     @Column(name = "space", nullable = false)
     private Space space;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     private String description;
 
     @ManyToOne(optional = false)
@@ -53,19 +50,47 @@ public class Property {
     @Column(name = "capacity")
     private Integer capacity;
 
-    @OneToMany(mappedBy = "property", orphanRemoval = true)
-    private Set<Reservation> reservations = new LinkedHashSet<>();
-
     @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "home_property_id")
     private HomeProperty homeProperty;
 
-    @OneToMany(mappedBy = "property", orphanRemoval = true)
-    private Set<Review> reviews = new LinkedHashSet<>();
-
     @ManyToOne
     @JoinColumn(name = "app_user_id")
     private AppUser appUser;
+
+    @Column(name = "cover_image")
+    private String cover_image;
+
+    public String getCover_image() {
+        return cover_image;
+    }
+
+    public void setCover_image(String cover_image) {
+        this.cover_image = cover_image;
+    }
+    public Property(String title,
+                    Type type,
+                    Space space,
+                    String description,
+                    Address address,
+                    Double pricePerNight,
+                    ApprovedStatus approvedStatus,
+                    Boolean availabiltyStatus,
+                    Integer capacity,
+                    HomeProperty homeProperty,
+                    AppUser appUser) {
+        this.title = title;
+        this.type = type;
+        this.space = space;
+        this.description = description;
+        this.address = address;
+        this.pricePerNight = pricePerNight;
+        this.approvedStatus = approvedStatus;
+        this.availabiltyStatus = availabiltyStatus;
+        this.capacity = capacity;
+        this.homeProperty = homeProperty;
+        this.appUser = appUser;
+    }
 
     public AppUser getAppUser() {
         return appUser;
@@ -91,17 +116,7 @@ public class Property {
         this.approvedStatus = approvedStatus;
         this.availabiltyStatus = availabiltyStatus;
         this.capacity = capacity;
-        this.reservations = reservations;
         this.homeProperty = homeProperty;
-        this.reviews = reviews;
-    }
-
-    public Set<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(Set<Review> reviews) {
-        this.reviews = reviews;
     }
 
     public HomeProperty getHomeProperty() {
@@ -110,14 +125,6 @@ public class Property {
 
     public void setHomeProperty(HomeProperty homeProperty) {
         this.homeProperty = homeProperty;
-    }
-
-    public Set<Reservation> getReservations() {
-        return reservations;
-    }
-
-    public void setReservations(Set<Reservation> reservations) {
-        this.reservations = reservations;
     }
 
     public Integer getCapacity() {
