@@ -14,6 +14,22 @@ public class AppUser {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    public AppUser(String firstName,
+                   String lastName,
+                   String userName,
+                   Set<Role> roles,
+                   String password,
+                   Address address,
+                   Account account) {
+        this.firstName = firstName;
+        this.roles = roles;
+        this.lastName = lastName;
+        this.userName = userName;
+        this.password = password;
+        this.address = address;
+        this.account = account;
+    }
+
     @Column(name = "first_name")
     private String firstName;
 

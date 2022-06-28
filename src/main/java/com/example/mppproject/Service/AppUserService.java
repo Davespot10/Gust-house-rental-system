@@ -31,7 +31,7 @@ public class AppUserService {
         return appUserRepository.findAll();
     }
 
-    public void addAppUser(AppUser appUser) {
+    public AppUser addAppUser(AppUser appUser) {
         Optional<AppUser> usernameEntry = appUserRepository.findByUserName(appUser.getUserName());
         if (usernameEntry.isPresent()) {
             throw new UserBadRequestException("Username already exists!");
@@ -46,7 +46,7 @@ public class AppUserService {
         Account account = accountRepository.save(appUser.getAccount());
         appUser.setAddress(address);
         appUser.setAccount(account);
-        appUserRepository.save(appUser);
+        return appUserRepository.save(appUser);
 
     }
 

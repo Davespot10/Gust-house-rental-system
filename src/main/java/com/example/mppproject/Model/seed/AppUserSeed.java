@@ -47,7 +47,7 @@ public class AppUserSeed implements CommandLineRunner {
             List<Address> add = addressRepository.findAll();
 
             List<AppUser> user = new ArrayList<>(Arrays.asList(data1,data2,data3,data5,data4));
-            for (int i=0;i<5;i++){
+            for (int i=0;i<2;i++){
                 user.get(i).setAccount(account.get(i));
                 user.get(i).setAddress(add.get(i));
                 appUserRepository.save(user.get(i));
