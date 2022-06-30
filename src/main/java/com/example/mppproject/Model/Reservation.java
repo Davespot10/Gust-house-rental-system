@@ -78,6 +78,7 @@ public class Reservation {
         return property;
     }
 
+
     public void setProperty(Property property) {
         this.property = property;
     }
@@ -85,6 +86,7 @@ public class Reservation {
     public AppUser getAppUser() {
         return appUser;
     }
+
 
     public void setAppUser(AppUser appUser) {
         this.appUser = appUser;
