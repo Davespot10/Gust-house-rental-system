@@ -2,6 +2,7 @@ package com.example.mppproject.Controller;
 
 import com.example.mppproject.Model.authentication.AuthenticationRequest;
 import com.example.mppproject.Model.authentication.AuthenticationResponse;
+import com.example.mppproject.Model.authentication.MyUserDetails;
 import com.example.mppproject.Service.MyUserDetailService;
 import com.example.mppproject.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class SecurityController {
                 .loadUserByUsername(authenticationRequest.getUsername());
         final String jwt = jwtUtil.generateToken(userDetails);
 
-        return ResponseEntity.ok(new AuthenticationResponse(jwt));
+        return ResponseEntity.ok(new AuthenticationResponse(jwt,(MyUserDetails) userDetails));
     }
 
 }
