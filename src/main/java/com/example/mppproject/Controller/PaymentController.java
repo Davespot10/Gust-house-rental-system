@@ -1,6 +1,7 @@
 package com.example.mppproject.Controller;
 
 import com.example.mppproject.Model.Payment;
+import com.example.mppproject.Model.Reservation;
 import com.example.mppproject.Service.PaymentService;
 import com.example.mppproject.Service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,9 @@ public class PaymentController {
     }
 
     @PutMapping (path = "/{refNumber}/{appUserId}")
-    public ResponseEntity<Payment> payment( @PathVariable("refNumber") String refNumber,@PathVariable("appUserId") Long appUserId){
+    public ResponseEntity<Payment> payment(@RequestBody Reservation reservation, @PathVariable("refNumber") String refNumber, @PathVariable("appUserId") Long appUserId){
 
-        Payment newPayment = paymentService.createPayment(refNumber, appUserId);
+        Payment newPayment = paymentService.createPayment(refNumber, appUserId, reservation);
         return new ResponseEntity<Payment>(newPayment, HttpStatus.ACCEPTED);
 
     }

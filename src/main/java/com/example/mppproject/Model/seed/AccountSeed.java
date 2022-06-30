@@ -5,8 +5,11 @@ import com.example.mppproject.Model.Account;
 
 import com.example.mppproject.Repository.AccountRepository;
 
+import com.example.mppproject.utility.EmailSenderService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
 
 @Component
 public class AccountSeed implements CommandLineRunner {
@@ -16,7 +19,9 @@ public class AccountSeed implements CommandLineRunner {
     }
     @Override
     public void run(String... args) throws Exception {
-        loadData();
+    EmailSenderService ess = new EmailSenderService();
+//               ess.sendEmail();
+//        loadData();
     }
     private void loadData() {
         if (accountRepository.count() == 0) {

@@ -94,4 +94,11 @@ public class ResponseEntityException extends ResponseEntityExceptionHandler {
                 (new Date(), HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
         return new ResponseEntity(message,HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    @ExceptionHandler(PropertyNotApprovedException.class)
+    public ResponseEntity<ExceptionResponse> PropertyNotApprovedException
+            (Exception exception, WebRequest webRequest){
+        ExceptionResponse message = new ExceptionResponse
+                (new Date(), HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
+        return new ResponseEntity(message,HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

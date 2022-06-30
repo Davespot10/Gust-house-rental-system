@@ -6,20 +6,23 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 @Service
 public class EmailSenderService {
     @Autowired
-    private static JavaMailSender mailSender;
+    private JavaMailSender mailSender;
+    SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 
+    public void sendEmail(String emailTo, String emailSubject, String emailBody ){
 
-    public static void sendEmail(String toEmail, String subject, String body){
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setFrom("dmznew.reservations@gmail.com");
-        simpleMailMessage.setTo(toEmail);
-        simpleMailMessage.setText(body);
-        simpleMailMessage.setSubject(subject);
+        simpleMailMessage.setTo(emailTo);
+        simpleMailMessage.setText(emailBody);
+        simpleMailMessage.setSubject(emailSubject);
 
-        mailSender.send(simpleMailMessage);
-        System.out.println("Message sent s>>>>>>>>...");
+        if(simpleMailMessage != null) {
+            mailSender.send(simpleMailMessage);
+            System.out.println("Message sent s>>>>>>>>...");
+        }
     }
 }
