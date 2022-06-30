@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -30,7 +31,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().
                 disable().
                 authorizeRequests()
-                .antMatchers("/authenticate").permitAll()
+                .antMatchers("/api/v1/login").permitAll()
                 .antMatchers("/api/v1/property").permitAll()
                 .antMatchers("/api/v1/property{id}").hasAnyAuthority("ADMIN")
                 .anyRequest().authenticated()
@@ -46,8 +47,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     }
     @Bean
-    public AuthenticationManager authenticationManagerBeen() throws Exception{
-        return super.authenticationManagerBean();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
