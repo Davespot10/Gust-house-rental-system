@@ -6,6 +6,7 @@ import com.example.mppproject.Repository.*;
 import com.example.mppproject.exceptionResponse.propertyException.PropertyNotFoundException;
 import com.example.mppproject.exceptionResponse.reservationException.*;
 import com.example.mppproject.exceptionResponse.userException.UserNotFoundException;
+import com.example.mppproject.utility.EmailSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +20,9 @@ public class PaymentService {
     private final ReservationRepository reservationRepository;
     private final PropertyRepository propertyRepository;
     private final AppUserRepository appUserRepository;
-
     private final PaymentRepository paymentRepository;
     private final AccountRepository accountRepository;
+    private final EmailSenderService emailSenderService;
 
     @Autowired
     public PaymentService(
@@ -29,16 +30,19 @@ public class PaymentService {
             PropertyRepository propertyRepository,
             AppUserRepository appUserRepository,
             PaymentRepository paymentRepository,
-            AccountRepository accountRepository
+            AccountRepository accountRepository,
+            EmailSenderService emailSenderService
+
     ){
         this.reservationRepository = reservationRepository;
         this.propertyRepository = propertyRepository;
         this.appUserRepository = appUserRepository;
         this.paymentRepository = paymentRepository;
         this.accountRepository = accountRepository;
+        this.emailSenderService = emailSenderService;
     }
-    public Payment createPayment(String refNumber, Long appUserId) {
-        Reservation reservation = reservationRepository.findReservationByRefNumber(refNumber).stream().findFirst().orElse(null);
+    public Payment createPayment(String refNumber, Long appUserId, Reservation reservation) {
+
         if(reservation == null){
             throw new ReservationNotFoundException("Reservation not found with this reference number");
         }
@@ -68,13 +72,27 @@ public class PaymentService {
         payment.setGuestAppUser(guestAppUser);
         payment.setHostAppUser(hostAppUser);
 
-        makePayment(payment, reservation, guestAppUser, hostAppUser);
+        makePayment(payment, reservation, guestAppUser, hostAppUser, property);
+
+        if(reservation.getReservationStatus().equals(ReservationStatusEnum.RESERVED)){
+            if(guestAppUser.getFirstName()==null) guestAppUser.setFirstName("");
+            if(guestAppUser.getLastName()==null) guestAppUser.setLastName("");
+            String emailTo = guestAppUser.getUserName();
+            String emailSubject = "DMZNeW Reservations - reservation conformation";
+            String emailBody = "Dear " + guestAppUser.getFirstName() + " " + guestAppUser.getLastName() +",\n"+
+                    "This is an automated email that confirms your reservation. Please do not reply to this email.\n"+
+                    "Confirmation number: " +reservation.getRefNumber()+"\n"+
+                    "Date: "+ LocalDate.now()+"\n";
+
+            emailSenderService.sendEmail(emailTo,emailSubject,emailBody);
+        }
+
 
         return payment;
     }
 
     @Transactional
-    public void makePayment(Payment payment, Reservation reservation, AppUser guestAppUser, AppUser hostAppUser){
+    public void makePayment(Payment payment, Reservation reservation, AppUser guestAppUser, AppUser hostAppUser, Property property){
 
         double totalPayment = reservation.getCalculatedPrice();
         double guestBalance = guestAppUser.getAccount().getBalance();
@@ -96,6 +114,9 @@ public class PaymentService {
         reservationRepository.save(reservation);
 
         paymentRepository.save(payment);
+
+        property.setAvailabiltyStatus(false);
+        propertyRepository.save(property);
 
     }
 }

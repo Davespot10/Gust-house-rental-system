@@ -24,11 +24,11 @@ public class Reservation {
     @Column(name = "end_date")
     private String endDate;
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "app_user_id")
     private AppUser appUser;
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "property_id")
     private Property property;
 

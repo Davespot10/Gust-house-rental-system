@@ -52,11 +52,12 @@ public class ReservationController {
        return new ResponseEntity<Reservation>(newReservation, HttpStatus.ACCEPTED);
     }
 
-    @PutMapping(path = "{refNumber}")
+    @PutMapping(path = "/cancel/{referenceNumber}/{appUserId}")
     public ResponseEntity<Reservation> cancelReservation(@RequestBody Reservation reservation,
-                                                         @PathVariable("refNumber") Long refNumber
+                                                         @PathVariable("referenceNumber") String refNumber,
+                                                         @PathVariable("appUserId") Long appUserId
     ){
-        Reservation canceledReservation = reservationService.cancelReservation(refNumber);
+        Reservation canceledReservation = reservationService.cancelReservation(refNumber, appUserId);
         return new ResponseEntity<Reservation>(canceledReservation, HttpStatus.ACCEPTED);
     }
 
