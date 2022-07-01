@@ -21,7 +21,7 @@ public class AccountSeed implements CommandLineRunner {
     public void run(String... args) throws Exception {
     EmailSenderService ess = new EmailSenderService();
 //               ess.sendEmail();
-//        loadData();
+        loadData();
     }
     private void loadData() {
         if (accountRepository.count() == 0) {

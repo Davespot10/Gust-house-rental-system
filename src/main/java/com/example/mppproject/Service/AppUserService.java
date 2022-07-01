@@ -76,8 +76,11 @@ public class AppUserService {
     }
 
 
-
-
+    public AppUser getAppUserById(long id) {
+        AppUser appUser = appUserRepository.findById(id);
+        if (appUser.getId() == 0) throw new UserNotFoundException("User Not Found!");
+        return appUser;
+    }
 
 
 }
