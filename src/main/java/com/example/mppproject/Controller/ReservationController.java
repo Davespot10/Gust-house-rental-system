@@ -60,5 +60,9 @@ public class ReservationController {
         Reservation canceledReservation = reservationService.cancelReservation(refNumber, appUserId);
         return new ResponseEntity<Reservation>(canceledReservation, HttpStatus.ACCEPTED);
     }
+    @GetMapping(path = "/reservationByUserId/{id}")
+    public List<Reservation> getReservationByUsrId(@PathVariable("id") String id) throws Exception {
+        return reservationService.getReservationById(id);
+    }
 
 }

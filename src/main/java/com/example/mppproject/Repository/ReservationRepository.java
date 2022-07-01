@@ -16,5 +16,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     Optional<Reservation> findReservationByRefNumber(String refNumber);
     Optional <Reservation> findFirstByPropertyAndAppUser(Property property, AppUser appUser);
 
-
+    List<Reservation> findReservationByAppUserId(Long id);
 }
