@@ -24,7 +24,7 @@ public class SecurityController {
     @Autowired
     private MyUserDetailService myUserDetailService;
 
-    @CrossOrigin
+//    @CrossOrigin
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<AuthenticationResponse> createAuthenticationToken
             (@RequestBody AuthenticationRequest authenticationRequest) throws Exception{
