@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Transactional
 public class MyUserDetails implements UserDetails {
-
+    private Long id;
     private String userName;
     private String password;
     private boolean active;
@@ -21,6 +21,7 @@ public class MyUserDetails implements UserDetails {
     private List<GrantedAuthority> roles;
 
     public MyUserDetails(AppUser user) {
+        this.id = user.getId();
         this.userName = user.getUserName();
         this.password = user.getPassword();
         this.active = true;
@@ -38,6 +39,10 @@ public class MyUserDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
+    }
+
+    public Long getId(){
+        return id;
     }
 
     @Override
