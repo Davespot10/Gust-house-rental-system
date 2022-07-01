@@ -36,6 +36,7 @@ public class PropertyController {
         this.reviewService = reviewService;
     }
 
+    @CrossOrigin
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
     public HashMap<String, Object> createProperties(
                                                     //            user ID
