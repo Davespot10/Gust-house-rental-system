@@ -34,7 +34,7 @@ public class AppUserController {
         return appUserService.addAppUser(appUser);
     }
 
-    @PutMapping
+    @PostMapping("/addAmount")
     public List<AppUser> editAppUserAccount(@RequestBody AppUser appUser) throws RuntimeException {
         appUserService.editAppUserAccount(appUser);
         return appUserService.getAppUser();
