@@ -28,7 +28,11 @@ public class Review {
     @Column(name = "review")
     private String review;
 
-
+    public Review(AppUser appUser, Property property, String review) {
+        this.appUser = appUser;
+        this.property = property;
+        this.review = review;
+    }
 
     public Property getProperty() {
         return property;

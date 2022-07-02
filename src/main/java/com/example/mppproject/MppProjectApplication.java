@@ -17,7 +17,6 @@ import java.io.IOException;
 @SpringBootApplication
 @RestController
 public class MppProjectApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(MppProjectApplication.class, args);
 	}
