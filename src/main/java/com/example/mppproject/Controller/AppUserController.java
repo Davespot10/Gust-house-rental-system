@@ -29,9 +29,9 @@ public class AppUserController {
     }
 
     @PostMapping
-    public List<AppUser> saveAppUser(@RequestBody AppUser appUser) {
-        appUserService.addAppUser(appUser);
-        return appUserService.getAppUser();
+    public AppUser saveAppUser(@RequestBody AppUser appUser) {
+
+        return appUserService.addAppUser(appUser);
     }
 
     @PutMapping

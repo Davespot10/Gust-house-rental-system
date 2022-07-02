@@ -9,6 +9,7 @@ import com.example.mppproject.Repository.AddressRepository;
 import com.example.mppproject.Repository.AppUserRepository;
 import com.example.mppproject.exceptionResponse.userException.UserBadRequestException;
 import com.example.mppproject.exceptionResponse.userException.UserNotFoundException;
+import com.example.mppproject.utility.RandomGenerator;
 import org.springframework.stereotype.Service;
 
 
@@ -38,17 +39,22 @@ public class AppUserService {
         if (usernameEntry.isPresent()) {
             throw new UserBadRequestException("Username already exists!");
         }
-        Integer accountNumberFromUser = appUser.getAccount().getAccountNumber();
-        Optional<Account> accountNumber = accountRepository.findByAccountNumber(accountNumberFromUser);
-        if (accountNumber.isPresent()) {
+//        Integer accountNumberFromUser = appUser.getAccount().getAccountNumber();
+        Integer accountNumber = RandomGenerator.generateAccount();
+        Optional<Account> accountNumberUser = accountRepository.findByAccountNumber(accountNumber);
+        if (accountNumberUser.isPresent()) {
             throw new UserBadRequestException("accountNumber already exists!");
         }
 
         Address address = addressRepository.save(appUser.getAddress());
-        Account account = accountRepository.save(appUser.getAccount());
+        Account account1 = new Account();
+        account1.setAccountNumber(accountNumber);
+        account1.setBalance(0.0);
+        Account account = accountRepository.save(account1);
         appUser.setAddress(address);
         appUser.setAccount(account);
         return appUserRepository.save(appUser);
+//        return appUser;
 
     }
 
