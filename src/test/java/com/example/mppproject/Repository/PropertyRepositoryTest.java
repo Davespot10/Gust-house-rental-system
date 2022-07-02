@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
         @Autowired
         private PropertyService propertyService;
     @Test
-    public void getProperty_Test(){
+    public void getProperty_test(){
         Account account = new Account(123465898, 672.2);
         Address address = new Address("Addis Ababa", "Addis Ababa", "Ethiopia", "1234", "5678", "19.2", "38.9");
         Set<Role> role = new HashSet<>();
@@ -47,7 +47,6 @@ import static org.junit.jupiter.api.Assertions.*;
         property.setId(2l);
         Mockito.when(propertyRepository.findAll()).thenReturn(Stream.of(property).collect(Collectors.toList()));
         assertEquals(1,propertyService.getProperty().size());
-
     }
 
 }
