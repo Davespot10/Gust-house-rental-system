@@ -29,24 +29,46 @@ import static org.junit.jupiter.api.Assertions.*;
         private PropertyRepository propertyRepository;
         @Autowired
         private PropertyService propertyService;
-    @Test
-    public void getProperty_test(){
-        Account account = new Account(123465898, 672.2);
-        Address address = new Address("Addis Ababa", "Addis Ababa", "Ethiopia", "1234", "5678", "19.2", "38.9");
-        Set<Role> role = new HashSet<>();
-        role.add(new Role(RoleType.GUEST));
-        AppUser appUser = new AppUser("Dawit", "Demelash", "davespot10", role, "123456", address, account);
-        appUser.setId(2l);
 
-        Type type = Type.HOME;
-        Space space = Space.ENTIRE_PLACE;
-        ApprovedStatus approvedStatus = ApprovedStatus.PENDING;
-        HomeProperty homeProperty = new HomeProperty(2, 3, 3, "Excellent Condition");
-        Property property = new Property("Luxury Apartment", type, space,
-                "stay safe", address, 123.22, approvedStatus, true, 2, homeProperty, appUser);
-        property.setId(2l);
-        Mockito.when(propertyRepository.findAll()).thenReturn(Stream.of(property).collect(Collectors.toList()));
-        assertEquals(1,propertyService.getProperty().size());
+        @Test
+        public void getProperty_test() {
+            Account account = new Account(123465898, 672.2);
+            Address address = new Address("Addis Ababa", "Addis Ababa", "Ethiopia", "1234", "5678", "19.2", "38.9");
+            Set<Role> role = new HashSet<>();
+            role.add(new Role(RoleType.GUEST));
+            AppUser appUser = new AppUser("Dawit", "Demelash", "davespot10", role, "123456", address, account);
+            appUser.setId(2l);
+
+            Type type = Type.HOME;
+            Space space = Space.ENTIRE_PLACE;
+            ApprovedStatus approvedStatus = ApprovedStatus.PENDING;
+            HomeProperty homeProperty = new HomeProperty(2, 3, 3, "Excellent Condition");
+            Property property = new Property("Luxury Apartment", type, space,
+                    "stay safe", address, 123.22, approvedStatus, true, 2, homeProperty, appUser);
+            property.setId(2l);
+            Mockito.when(propertyRepository.findAll()).thenReturn(Stream.of(property).collect(Collectors.toList()));
+            assertEquals(1, propertyService.getProperty().size());
+        }
+
+        @Test
+        public void getAllMyPropertyByUserId_test() {
+            Account account = new Account(123465898, 672.2);
+            Address address = new Address("Addis Ababa", "Addis Ababa", "Ethiopia", "1234", "5678", "19.2", "38.9");
+            Set<Role> role = new HashSet<>();
+            role.add(new Role(RoleType.GUEST));
+            AppUser appUser = new AppUser("Dawit", "Demelash", "davespot10", role, "123456", address, account);
+            appUser.setId(2l);
+            Type type = Type.HOME;
+            Space space = Space.ENTIRE_PLACE;
+            ApprovedStatus approvedStatus = ApprovedStatus.PENDING;
+            HomeProperty homeProperty = new HomeProperty(2, 3, 3, "Excellent Condition");
+            Property property = new Property("Luxury Apartment", type, space,
+                    "stay safe", address, 123.22, approvedStatus, true, 2, homeProperty, appUser);
+            property.setId(2l);
+            long appUserId = 2;
+            Mockito.when(propertyRepository.findByAppUser_Id(appUserId)).thenReturn(Stream.of(property).collect(Collectors.toList()));
+            assertEquals(1, propertyService.getAllMyPropertyByUserId(appUserId).size());
+
+        }
     }
 
-}
