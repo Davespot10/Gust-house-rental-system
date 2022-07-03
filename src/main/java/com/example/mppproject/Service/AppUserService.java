@@ -52,10 +52,11 @@ public class AppUserService {
         account1.setBalance(0.0);
         Account account = accountRepository.save(account1);
 
-        Role role = roleRepository.findByRoleType(RoleType.GUEST);
-
         Set<Role> roles = new HashSet<>();
-        roles.add(role);
+        for(Role r: appUser.getRoles()){
+            Role role = roleRepository.findByRoleType(r.getRoleType());
+            roles.add(role);
+        }
 
         appUser.setAddress(address);
         appUser.setAccount(account);
