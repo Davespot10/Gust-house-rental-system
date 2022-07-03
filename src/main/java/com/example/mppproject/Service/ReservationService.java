@@ -20,6 +20,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReservationService {
@@ -46,11 +47,6 @@ public class ReservationService {
         this.paymentRepository = paymentRepository;
         this.accountRepository=accountRepository;
     }
-
-
-
-
-
     public Reservation createReservation(Long appUserId, Long propertyId, Reservation reservation) {
 
 
@@ -188,5 +184,18 @@ public class ReservationService {
 
 
 
+    }
+
+    public List<Reservation> getReservationById(String id) throws Exception {
+        try{
+            Long userId = Long.valueOf(id);
+            List<Reservation> reservation = reservationRepository.findReservationByAppUserId(userId);
+            if(reservation.isEmpty()){
+                throw new ReservationNotFoundException("Reservation not found");
+            }
+            return reservation;
+        }catch (NumberFormatException e){
+            throw new NumberFormatException();
+        }
     }
 }

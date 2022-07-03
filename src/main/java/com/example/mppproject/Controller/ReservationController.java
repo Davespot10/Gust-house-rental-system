@@ -52,13 +52,17 @@ public class ReservationController {
        return new ResponseEntity<Reservation>(newReservation, HttpStatus.ACCEPTED);
     }
 
-    @PutMapping(path = "/cancel/{referenceNumber}/{appUserId}")
-    public ResponseEntity<Reservation> cancelReservation(@RequestBody Reservation reservation,
+    @PostMapping(path = "/cancel/{referenceNumber}/{appUserId}")
+    public ResponseEntity<Reservation> cancelReservation(
                                                          @PathVariable("referenceNumber") String refNumber,
                                                          @PathVariable("appUserId") Long appUserId
     ){
         Reservation canceledReservation = reservationService.cancelReservation(refNumber, appUserId);
         return new ResponseEntity<Reservation>(canceledReservation, HttpStatus.ACCEPTED);
+    }
+    @GetMapping(path = "/reservationByUserId/{id}")
+    public List<Reservation> getReservationByUsrId(@PathVariable("id") String id) throws Exception {
+        return reservationService.getReservationById(id);
     }
 
 }

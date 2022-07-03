@@ -29,13 +29,18 @@ public class AppUserController {
         return appUserService.getAppUser();
     }
 
-    @PostMapping
-    public List<AppUser> saveAppUser(@RequestBody AppUser appUser) {
-        appUserService.addAppUser(appUser);
-        return appUserService.getAppUser();
+    @GetMapping(path = "{id}")
+    public AppUser getAppUserById(@PathVariable("id") long id) {
+        return appUserService.getAppUserById(id);
     }
 
-    @PutMapping
+    @PostMapping
+    public AppUser saveAppUser(@RequestBody AppUser appUser) {
+
+        return appUserService.addAppUser(appUser);
+    }
+
+    @PostMapping("/addAmount")
     public List<AppUser> editAppUserAccount(@RequestBody AppUser appUser) throws RuntimeException {
         appUserService.editAppUserAccount(appUser);
         return appUserService.getAppUser();

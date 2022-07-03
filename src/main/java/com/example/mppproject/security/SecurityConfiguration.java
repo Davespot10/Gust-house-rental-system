@@ -53,6 +53,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(String.valueOf(HttpMethod.GET), "/api/v1/property{id}").permitAll()
                 .antMatchers(String.valueOf(HttpMethod.GET), "/api/v1/AppUser").permitAll()
                 .antMatchers(String.valueOf(HttpMethod.POST), "/api/v1/AppUser").permitAll()
+//                TODO: shown only to admin
+                .antMatchers(String.valueOf(HttpMethod.PUT), "/api/v1/AppUser").permitAll()
                 .antMatchers(String.valueOf(HttpMethod.POST), "/api/v1/property/{propertyId}/reviews").permitAll();
 
 

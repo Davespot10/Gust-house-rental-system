@@ -19,7 +19,7 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
-    @PutMapping (path = "/{refNumber}/{appUserId}")
+    @PostMapping (path = "/{refNumber}/{appUserId}")
     public ResponseEntity<Payment> payment(@RequestBody Reservation reservation, @PathVariable("refNumber") String refNumber, @PathVariable("appUserId") Long appUserId){
 
         Payment newPayment = paymentService.createPayment(refNumber, appUserId, reservation);
