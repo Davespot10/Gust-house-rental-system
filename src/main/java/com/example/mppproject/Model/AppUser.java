@@ -1,5 +1,11 @@
 package com.example.mppproject.Model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import java.util.LinkedHashSet;
 import java.util.Optional;
@@ -8,6 +14,9 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "Appuser")
+@Builder
+@Data
+@AllArgsConstructor
 public class AppUser {
     @Id
     @Column(name = "id", nullable = false)

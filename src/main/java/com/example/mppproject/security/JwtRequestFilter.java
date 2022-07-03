@@ -3,6 +3,7 @@ package com.example.mppproject.security;
 import com.example.mppproject.Service.MyUserDetailService;
 import com.example.mppproject.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +20,7 @@ import java.util.Collections;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
+
     @Autowired
     private MyUserDetailService myUserDetailService;
     @Autowired
