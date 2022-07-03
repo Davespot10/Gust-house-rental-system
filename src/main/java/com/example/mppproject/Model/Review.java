@@ -28,6 +28,9 @@ public class Review {
     @Column(name = "review")
     private String review;
 
+    public Review() {
+    }
+
     public Review(AppUser appUser, Property property, String review) {
         this.appUser = appUser;
         this.property = property;

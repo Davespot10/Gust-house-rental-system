@@ -66,8 +66,8 @@ public class PropertyController {
         HomeProperty homeProperty = new HomeProperty(Integer.parseInt(bath_room_number), Integer.parseInt(bed_number), Integer.parseInt(bed_room_number), property_description);
         Property property = new Property(title, Type.valueOf(type), Space.valueOf(space),description,address
                 ,Double.parseDouble(price_per_night),
-                ApprovedStatus.PENDING,
-                false, Integer.parseInt(capacity), null, homeProperty,null);
+                ApprovedStatus.APPROVED,
+                true, Integer.parseInt(capacity), null, homeProperty,null);
 
         Property result = propertyService.create(property, images, user_id);
         HashMap<String, Object> resp = new HashMap<>();
