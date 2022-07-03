@@ -20,8 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "api/v1/property")
@@ -121,8 +119,8 @@ public class PropertyController {
         HomeProperty homeProperty = new HomeProperty(Integer.parseInt(bath_room_number), Integer.parseInt(bed_number), Integer.parseInt(bed_room_number), description);
         Property property = new Property(title, Type.valueOf(type), Space.valueOf(space),description,address
                 ,Double.parseDouble(price_per_night),
-                ApprovedStatus.PENDING,
-                false, Integer.parseInt(capacity), null, homeProperty,null);
+                ApprovedStatus.APPROVED,
+                true, Integer.parseInt(capacity), null, homeProperty,null);
         property.setId(Long.valueOf(property_id));
 
         Object result = propertyService.update(property, images, user_id);

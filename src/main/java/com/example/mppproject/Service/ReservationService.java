@@ -47,11 +47,6 @@ public class ReservationService {
         this.paymentRepository = paymentRepository;
         this.accountRepository=accountRepository;
     }
-
-
-
-
-
     public Reservation createReservation(Long appUserId, Long propertyId, Reservation reservation) {
 
 
