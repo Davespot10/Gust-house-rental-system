@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/v1/property")
+@RequestMapping(path = "/api/v1/property")
 public class PropertyController {
 
     private final PropertyService propertyService;
