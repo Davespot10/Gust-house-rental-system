@@ -189,7 +189,8 @@ public class ReservationService {
     public List<Reservation> getReservationById(String id) throws Exception {
         try{
             Long userId = Long.valueOf(id);
-            List<Reservation> reservation = reservationRepository.findReservationByAppUserId(userId);
+            List<Reservation> reservation = reservationRepository.findReservationByAppUserIdAndReservationStatus(userId, ReservationStatusEnum.RESERVED);
+
             if(reservation.isEmpty()){
                 throw new ReservationNotFoundException("Reservation not found");
             }
