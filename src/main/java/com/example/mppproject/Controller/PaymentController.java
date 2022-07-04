@@ -23,7 +23,7 @@ public class PaymentController {
     public ResponseEntity<Payment> payment(@RequestBody Reservation reservation, @PathVariable("refNumber") String refNumber, @PathVariable("appUserId") Long appUserId){
 
         Payment newPayment = paymentService.createPayment(refNumber, appUserId, reservation);
-        return new ResponseEntity<Payment>(newPayment, HttpStatus.ACCEPTED);
+        return new ResponseEntity<Payment>(newPayment, HttpStatus.OK);
 
     }
 }

@@ -3,6 +3,10 @@ package com.example.mppproject.Model;
 import com.example.mppproject.Model.Enum.ApprovedStatus;
 import com.example.mppproject.Model.Enum.Space;
 import com.example.mppproject.Model.Enum.Type;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -11,7 +15,9 @@ import java.util.Set;
 
 
 @Entity
-
+@Builder
+@Data
+@AllArgsConstructor
 @Table(name = "property")
 public class Property {
     @Id

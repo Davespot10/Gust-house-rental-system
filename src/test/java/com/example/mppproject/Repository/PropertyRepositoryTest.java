@@ -66,7 +66,7 @@ import static org.junit.jupiter.api.Assertions.*;
                     "stay safe", address, 123.22, approvedStatus, true, 2, homeProperty, appUser);
             property.setId(2l);
             long appUserId = 2;
-            Mockito.when(propertyRepository.findByAppUser_Id(appUserId)).thenReturn(Stream.of(property).collect(Collectors.toList()));
+            Mockito.when(propertyRepository.findByAppUser_Id(appUser.getId())).thenReturn(Stream.of(property).collect(Collectors.toList()));
             assertEquals(1, propertyService.getAllMyPropertyByUserId(appUserId).size());
 
         }

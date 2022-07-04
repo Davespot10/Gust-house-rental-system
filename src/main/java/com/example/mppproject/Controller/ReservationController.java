@@ -34,13 +34,13 @@ public class ReservationController {
     @GetMapping //admin
     public ResponseEntity<List<Reservation>> getReservations(){
         List<Reservation> reservations = reservationService.getReservations();
-        return new ResponseEntity<List<Reservation>>(reservations, HttpStatus.ACCEPTED);
+        return new ResponseEntity<List<Reservation>>(reservations, HttpStatus.OK);
     }
 
     @GetMapping(path = "/{referenceNumber}") //admin and guest
     public ResponseEntity<Reservation> getResrvationByRef(@PathVariable("referenceNumber") String referenceNumber){
         Reservation reservation = reservationService.getReservationByRef(referenceNumber);
-        return new ResponseEntity<>(reservation, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(reservation, HttpStatus.OK);
     }
     @PostMapping(path = "{appUserId}/{propertyId}") //guest
     public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation,

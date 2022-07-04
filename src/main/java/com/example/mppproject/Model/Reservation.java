@@ -1,6 +1,9 @@
 package com.example.mppproject.Model;
 
 import com.example.mppproject.Model.Enum.ReservationStatusEnum;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -8,6 +11,9 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
+@Builder
+@Data
+@AllArgsConstructor
 @Table(name = "reservation")
 public class Reservation {
     @Id
